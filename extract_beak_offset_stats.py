@@ -2,6 +2,11 @@ import sys
 import numpy as np
 import getopt
 
+# This debug variable allows the initialization beak signal glitch that occurs to be 
+# "filtered" out to avoid the skewing of data. The "filter" simply ignores any
+# beak signals that occur before 0s (CAM UP).
+AEW_DEBUG = 1
+
 def usage():
     print("extract_beak_offset_stats.py -r <rotor name> [-o]")
     print(" -r <rotor name> Full prefix name of rotor")
@@ -53,6 +58,14 @@ except:
     sys.exit(1)
 
 line = fileIn.readline()
+line = fileIn.readline() # Get passed the File: etc. line
+
+## Collect beak times
+beakErrorTime = []
+while "Done" not in line:
+    line = [l.strip() for l in line.split()]
+    beakErrorTime.append(float(line[1]))
+    line = fileIn.readline()
 
 while "Global Cuvette Delay" not in line:
     line = fileIn.readline()
@@ -76,6 +89,14 @@ while line:
     line = [l.strip() for l in line.split()]
     beakError.append(float(line[7]))
     beakErrorPercent.append(float(line[8]))
+
+## "Filter" the list to remove any beak values that occur before 0s
+if AEW_DEBUG:
+    temp = np.min(beakErrorTime)
+    temp_idx = beakErrorTime.index(temp)
+    del beakError[temp_idx]
+    del beakErrorPercent[temp_idx]
+
 
 ## Find statistics
 beakError_avg = np.mean(beakError)

@@ -3,6 +3,11 @@ import os
 import numpy as np
 import getopt
 
+# This debug variable allows the initialization beak signal glitch that occurs to be 
+# "filtered" out to avoid the skewing of data. The "filter" simply ignores any
+# beak signals that occur before 0s (CAM UP).
+AEW_DEBUG = 1
+
 def usage():
     print("extract_hold_time_stats.py -r <rotor name> [-o]")
     print(" -r <rotor name> Full prefix name of rotor")
@@ -35,15 +40,13 @@ if rotor_name == "":
 
 infilename = rotor_name + "_BeakTimingOut.txt"
 
-print("Hold Time Stats\n")
-
 all_holdTime = []
 
 if infilename == "":
     print("No file name detected.")
     sys.exit(1)
 
-print("\nFile Name: %s\n" % infilename)
+print("\nFile Name: %s" % infilename)
 
 try:
     fileIn = open(infilename, 'rt')
@@ -52,6 +55,14 @@ except:
     sys.exit(1)
 
 line = fileIn.readline()
+line = fileIn.readline() # Get passed the File: etc. line
+
+## Collect hold times
+holdT = []
+while "Done" not in line:
+    line = [l.strip() for l in line.split()]
+    holdT.append(float(line[1]))
+    line = fileIn.readline()
 
 while "Global Cuvette Delay" not in line:
     line = fileIn.readline()
@@ -70,11 +81,19 @@ while line:
     line = [l.strip() for l in line.split()]
     holdTime.append( float(line[5]) - float(line[4]) )
 
+## "Filter" the list to remove any beak values that occur before 0s
+if AEW_DEBUG:
+    temp = np.min(holdT)
+    temp_idx = holdT.index(temp)
+    del holdTime[temp_idx]
+
 ## Find statistics
 avg = np.mean(holdTime)
 min = np.min(holdTime)
 max = np.max(holdTime)
 std = np.std(holdTime)
+
+print("Hold Time Stats\n")
 
 print("     Hold Time")
 print("     ---------")

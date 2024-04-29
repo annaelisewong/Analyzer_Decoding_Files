@@ -19,6 +19,9 @@ DEBUG1 = 0
 DEBUG2 = 0
 DEBUG3 = 0
 DEBUG4 = 0
+# This debug variable allows the initialization beak signal glitch that occurs to be 
+# "filtered" out to avoid the skewing of data. The "filter" simply ignores any
+# beak signals that occur before 0s (CAM UP).
 AEW_DEBUG = 1
 
 """
@@ -441,7 +444,7 @@ print ("        ----------    -------")
 if AEW_DEBUG:
 	temp = np.min(arr_BeakTime)
 	if temp < 0:
-		arr_BeakTime = np.delete(arr_BeakTime, np.where(arr_BeakTime == temp))
+		arr_BeakTime = np.delete(arr_BeakTime, np.where(arr_BeakTime < 0))
 	temp = np.max(arr_BeakToHold)
 	if temp > 120:
 		arr_BeakToHold = np.delete(arr_BeakToHold, np.where(arr_BeakToHold == temp))
