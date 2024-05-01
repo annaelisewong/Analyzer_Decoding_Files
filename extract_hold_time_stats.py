@@ -109,12 +109,12 @@ if CREATE_OUTPUT_FILE:
     fileOut.write("Hold Time Stats\n\n")
     fileOut.write("File Name: %s\n\n" % infilename)
 
-    fileOut.write("     Hold Time")
-    fileOut.write("     ---------")
-    fileOut.write("Min  %9.3f" % (min))
-    fileOut.write("Max  %9.3f" % (max))
-    fileOut.write("Avg  %9.3f" % (avg))
-    fileOut.write("Std  %9.3f" % (std))
+    fileOut.write("     Hold Time\n")
+    fileOut.write("     ---------\n")
+    fileOut.write("Min  %9.3f\n" % (min))
+    fileOut.write("Max  %9.3f\n" % (max))
+    fileOut.write("Avg  %9.3f\n" % (avg))
+    fileOut.write("Std  %9.3f\n" % (std))
 
     fileOut.close()
 
