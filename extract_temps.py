@@ -337,7 +337,7 @@ def calculateStatistics(phaseNames, ambPhaseTemps, topPhaseTemps, botPhaseTemps,
     rtrStats = []
     for phase, amb, top, bot, rtr in zip(phaseNames, ambPhaseTemps, topPhaseTemps, botPhaseTemps, rtrPhaseTemps):
         fileOut.write("\n")
-        fileOut.write(phase)
+        fileOut.write("%s\n" % phase)
         fileOut.write("  Ambient Temps:\n")
         if len(amb) > 0:
             fileOut.write("    Min: %.3f\n" % np.min(amb))
