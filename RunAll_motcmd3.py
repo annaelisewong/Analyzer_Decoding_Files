@@ -4,8 +4,8 @@ import subprocess
 
 argc = len(sys.argv)
 if argc == 1:
-    rx_file_list = [os.path.join(dirpath, filename) for dirpath, _, filenames in os.walk('.') for filename in filenames if "_motrx.txt" in filename]
-    tx_file_list = [os.path.join(dirpath, filename) for dirpath, _, filenames in os.walk('.') for filename in filenames if "_mottx.txt" in filename]
+    rx_file_list = [os.path.join(dirpath, filename) for dirpath, _, filenames in os.walk('.') for filename in filenames if "Group1_motrx.txt" in filename]
+    tx_file_list = [os.path.join(dirpath, filename) for dirpath, _, filenames in os.walk('.') for filename in filenames if "Group1_mottx.txt" in filename]
 if argc > 3:
     print("Too many arguments.")
     sys.exit(0)

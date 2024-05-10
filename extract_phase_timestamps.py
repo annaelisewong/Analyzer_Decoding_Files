@@ -23,7 +23,7 @@ def parseMotCmdMsgOut(fileIn):
     line = fileIn.readline()
     if "Could not open input file" in line:
         print("Issue with ")
-    while "Summary" not in line:
+    while "Summary" not in line and line:
         line = fileIn.readline()
 
     for i in range(4):
@@ -456,14 +456,6 @@ mot_infilename = rotor_name + "_MotCmdMsgOut.txt"
 msg_infilename = rotor_name + "_MsgOut.txt"
 motor_files = [rotor_name + "_Group1_mot.bin"]
 
-outfilename = rotor_name + "_PhaseTimestampsOut.txt"
-fileOut = open(outfilename, 'wt')
-print("Output file: %s" % outfilename)
-
-fileOut.write("%s High Level Phase Timestamps\n" % rotor_name)
-phases = ['Barcode Read', 'Transition', 'Separate', 'Transition', 'Prime S1/S2', 'Transition', 'Unnamed', 'Transition', 'Read Check 1', 'Transition', 'Move to Mix Chamber', 'Mix Sample', \
-            'Transition', 'Read Check 2', 'Transition', 'Prime S3', 'Transition', 'Distribute Chemistries', 'Transition', 'Read Check 3', 'Transition', 'Mix Chemistries', 'Transition', 'Read', 'Idle']
-
 motT = []
 phaseT = []
 msgOutT = []
@@ -472,6 +464,8 @@ msgOutT = []
 if "Lipid" in ris_infilename:
     print("Skipping: %s" % (ris_infilename))
     sys.exit(1)
+
+print("Extracting phase timestamps for %s" % rotor_name)
 
 if ris_infilename != "":
 
@@ -497,6 +491,11 @@ if mot_infilename != "":
         
     fileIn.close()
 
+    if len(motRPM) < 5:
+        print("%s did not contain any values. Exiting now." % mot_infilename)
+        sys.exit(1)
+
+
 if msg_infilename != "":
 
     try:
@@ -510,6 +509,13 @@ if msg_infilename != "":
     fileIn.close()
 
 # Find phase timestamps for plotting
+outfilename = rotor_name + "_PhaseTimestampsOut.txt"
+fileOut = open(outfilename, 'wt')
+print("Output file: %s" % outfilename)
+fileOut.write("%s High Level Phase Timestamps\n" % rotor_name)
+phases = ['Barcode Read', 'Transition', 'Separate', 'Transition', 'Prime S1/S2', 'Transition', 'Unnamed', 'Transition', 'Read Check 1', 'Transition', 'Move to Mix Chamber', 'Mix Sample', \
+            'Transition', 'Read Check 2', 'Transition', 'Prime S3', 'Transition', 'Distribute Chemistries', 'Transition', 'Read Check 3', 'Transition', 'Mix Chemistries', 'Transition', 'Read', 'Idle']
+
 phaseT = findPhases(msgOutT, motT, motRPM, risAccl)
 fileOut.write("\nPhase Names                Timestamps\n")
 fileOut.write("-------------------------  ----------\n")

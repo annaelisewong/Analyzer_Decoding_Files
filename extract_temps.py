@@ -413,10 +413,14 @@ g1_infilename = rotor_name + "_Group1Data.txt"
 p_infilename = rotor_name + "_PhaseTimestampsOut.txt"
 m_infilename = rotor_name + "_MsgOut.txt"
 
-# In case I forgot to grab the phase timestamps
 if not os.path.isfile(p_infilename):
-    p = subprocess.Popen(["python3", "C:\\Users\\awong\\Documents\\Analyzer_Decoding_Files\\extract_phase_timestamps.py", "-r", rotor_name])
-    p.wait()
+    print("Phase timestamps file does not exist. Exiting now.")
+    sys.exit(1)
+
+# # In case I forgot to grab the phase timestamps
+# if not os.path.isfile(p_infilename):
+#     p = subprocess.Popen(["python3", "C:\\Users\\awong\\Documents\\Analyzer_Decoding_Files\\extract_phase_timestamps.py", "-r", rotor_name])
+#     p.wait()
 
 if "Group1Data" not in g1_infilename or "PhaseTimestampsOut" not in p_infilename or "MsgOut" not in m_infilename:
     print("Did not receive expected files.")

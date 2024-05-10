@@ -153,7 +153,7 @@ def parseMotCmdMsgOut(fileIn):
     line = fileIn.readline()
     if "Could not open input file" in line:
         print("Issue with ")
-    while "Summary" not in line:
+    while "Summary" not in line and line:
         line = fileIn.readline()
 
     for i in range(4):
@@ -2928,9 +2928,6 @@ mot_infilename = rotor_name + "_MotCmdMsgOut.txt"
 msg_infilename = rotor_name + "_MsgOut.txt"
 motor_files = [rotor_name + "_Group1_mot.bin"]
 
-outfilename = rotor_name + "_PhaseStatsOut.txt"
-fileOut = open(outfilename, 'wt')
-
 motT = []
 phaseT = []
 msgOutT = []
@@ -2963,6 +2960,10 @@ if mot_infilename != "":
     motRPM, motdT, motT = parseMotCmdMsgOut(fileIn)
         
     fileIn.close()
+
+    if len(motRPM) < 2:
+        print("%s did not contain any values. Exiting now." % mot_infilename)
+        sys.exit(1)
 
     # # NOTE: this function needs to be updated to better include all stages of a phase
     # # timestamps, durations, durationdict = parsePhases(risRPM, motRPM, motT, Phase.INIT) # durationsdict currently unused for anything. purely informational
@@ -3021,6 +3022,9 @@ for i in range(len(motor_files)):
 	plt.plot(xtime, yrpm, color=colors[i], linewidth=0.5, label=motor_files[i])
 
 ## Uncomment to calculate and print statistics for each motor command section
+outfilename = rotor_name + "_PhaseStatsOut.txt"
+fileOut = open(outfilename, 'wt')
+
 if "Rotor1" in rotor_name:
     findMotCmdTolerances_Rotor1(motT, motRPM, risRPM, risAccl, xtime, yrpm, fileOut)
 else:

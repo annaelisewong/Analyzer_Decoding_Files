@@ -19,6 +19,9 @@ for rx_infilename, tx_infilename in zip(rx_file_list, tx_file_list):
     file_count += 1
 
     print("(%d/%d) Starting %s %s" % (file_count, len(tx_file_list), tx_infilename, rx_infilename))
+    if "Serial" not in rx_infilename or "Serial" not in tx_infilename:
+        print("        'Serial' not found in infilename. Skipping.")
+        continue
 
     outfilename = tx_infilename.replace("Serial", "")
     outfilename = outfilename.replace("Group0_tx", "MsgOut")

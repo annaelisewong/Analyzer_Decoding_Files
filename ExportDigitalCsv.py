@@ -44,7 +44,7 @@ if configFilename == '':
 	sys.exit(1)
 
 # Path to folder containing .sal files
-salFilePath = "C:\\Users\\awong\\Documents\\Box_Logic_Analyzer_Data\\Dev_Platform\\OFS004\\240415\\Data"
+salFilePath = "C:\\Users\\awong\\Documents\\Box_Logic_Analyzer_Data\\Dev_Platform\\OFS5\\240506\\Data"
 salExtension = "sal"
 
 # Get list of files to process from special text file

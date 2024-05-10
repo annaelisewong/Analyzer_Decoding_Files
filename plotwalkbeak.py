@@ -47,14 +47,14 @@ print ("Starting ... %s" % (tstr))
 #     if o == "-i":
 #         infilename = a
 
-infilename = sys.argv[2]
+infilename = sys.argv[1]
 
 if infilename == '':
     usage()
     sys.exit(1)
 
-testCuv = int(sys.argv[3])
-gcd = int(sys.argv[4])
+testCuv = int(sys.argv[2])
+gcd = int(sys.argv[3])
 
 try:
 	fileIn = open(infilename, 'rt')
@@ -206,30 +206,30 @@ for i in range(len_sampdat):
 
 	print ("%d %f" % (sampdat[i][0], sum))
 
-max_y = max(w340)
-max_y = max(max(w405), max_y)
-max_y = max(max(w467), max_y)
-max_y = max(max(w500), max_y)
-max_y = max(max(w515), max_y)
-max_y = max(max(w550), max_y)
-max_y = max(max(w600), max_y)
-max_y = max(max(w630), max_y)
-max_y = max(max(w850), max_y)
+# max_y = max(w340)
+# max_y = max(max(w405), max_y)
+# max_y = max(max(w467), max_y)
+# max_y = max(max(w500), max_y)
+# max_y = max(max(w515), max_y)
+# max_y = max(max(w550), max_y)
+# max_y = max(max(w600), max_y)
+# max_y = max(max(w630), max_y)
+# max_y = max(max(w850), max_y)
 
 """
 AEW changes for testing protocols
 """
-w340_max_y = max(w340)
-w405_max_y = max(w405)
-w467_max_y = max(w467)
-w500_max_y = max(w500)
-w515_max_y = max(w515)
-w550_max_y = max(w550)
-w600_max_y = max(w600)
-w630_max_y = max(w630)
-w850_max_y = max(w850)
+# w340_max_y = max(w340)
+# w405_max_y = max(w405)
+# w467_max_y = max(w467)
+# w500_max_y = max(w500)
+# w515_max_y = max(w515)
+# w550_max_y = max(w550)
+# w600_max_y = max(w600)
+# w630_max_y = max(w630)
+# w850_max_y = max(w850)
 
-w340_max_x = t(w340.index(w340_max_y))
+# w340_max_x = t(w340.index(w340_max_y))
 
 
 """
@@ -260,7 +260,7 @@ plt.plot(t, w850, color='red', linewidth=0.5, label="850")
 title = basefile.replace("_Putty", "")
 
 #plt.xlim([195, 205])
-plt.ylim([18000,27000])
+# plt.ylim([18000,27000])
 plt.xlabel('Delay, us')
 plt.ylabel('Signal')
 plt.title('Cuvette Delay')
@@ -268,9 +268,9 @@ fig.suptitle("%s" % (title), fontsize = 10)
 #plt.axhline(y=0, color='grey', linestyle=':', linewidth=1.0)
 #plt.axvline(x=0, color='grey', linestyle=':', linewidth=1.0)
 plt.axvline(x = gcd, color = 'grey', linewidth=.5)
-plt.axhline(y=max_y + 5, color='grey', linewidth=0.5)
-plt.axvline(x=w340_max_x, color='red', linewidth=.5) # testing to see if the line drawn is actually the max of this - delete later
-plt.axhline(y=w340_max_y, color='red', linewidth=.5) # testing to see if the line drawn intersects at the right point with the line above - delete later
+# plt.axhline(y=max_y + 5, color='grey', linewidth=0.5)
+# plt.axvline(x=w340_max_x, color='red', linewidth=.5) # testing to see if the line drawn is actually the max of this - delete later
+# plt.axhline(y=w340_max_y, color='red', linewidth=.5) # testing to see if the line drawn intersects at the right point with the line above - delete later
 #ax = fig.gca()
 plt.legend(fontsize = 8)
 

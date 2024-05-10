@@ -226,7 +226,6 @@ class parse_host:
 
 	def update(self, time_in, int_in, dir):
 		rs = ""
-
 		if VERBOSE3:
 			fileOut.write ("%11.6f %2.2x %d" % (time_in, int_in, dir))
 

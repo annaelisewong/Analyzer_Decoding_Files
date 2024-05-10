@@ -1,10 +1,7 @@
-salFolder=C:\Users\awong\Documents\Box_Logic_Analyzer_Data\Dev_Platform\OFS004\240416\Data
-destinationFolder=C:\Users\awong\Documents\Box_Logic_Analyzer_Data\Dev_Platform\OFS004\240416\Exports
-7_Rotor1_Group0
-8_Rotor1_Group0
-9_Rotor1_Group0
-10_Rotor1_Group0
-7_Rotor1_Group1
-8_Rotor1_Group1
-9_Rotor1_Group1
-10_Rotor1_Group1
+salFolder=C:\Users\awong\Documents\Box_Logic_Analyzer_Data\Dev_Platform\OFS5\240506\Data
+destinationFolder=C:\Users\awong\Documents\Box_Logic_Analyzer_Data\Dev_Platform\OFS5\240506\Exports
+240506_1342_Rotor1_Group1
+240506_1430_Rotor1_Group1
+240506_1448_Rotor1_Group1
+240506_1514_Rotor1_Group1
+240506_1528_Rotor1_Group1

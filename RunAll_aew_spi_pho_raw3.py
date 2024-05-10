@@ -34,6 +34,7 @@ for infilename in file_list:
     outfilename = os.path.splitext(infilename)[0] + "Data.txt"
 
     print("(%d/%d) Running: spi_pho_raw3.py for %s" % (file_count, total_files, infilename))
+    print("        Output file: %s" % outfilename)
     fileOut = open(outfilename, 'wt')
     p = subprocess.Popen(["python3", "C:\\Users\\awong\\Documents\\Analyzer_Decoding_Files\\spi_pho_raw3.py", "-i", infilename, "-a", "Serial"], stdout=fileOut)
     p.wait()

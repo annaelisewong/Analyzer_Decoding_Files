@@ -642,6 +642,8 @@ except:
 
 base = os.path.basename(infilename)
 basefile = os.path.splitext(base)[0]
+# AEW added in:
+prefix = infilename.replace(base, "")
 
 lastmodified= os.stat("%s"%(infilename)).st_mtime
 aa = time.localtime(lastmodified)
@@ -760,14 +762,18 @@ estr = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time()))
 if ASYNC_TO_FILE:
 	R = serialRx.get_values()
 	lenR = len(R)
-	with open("%s%s_rx.txt" % (outPath, basefile), 'wt') as f:
+	# AEW edit: replace 'basefile' with new path
+	# with open("%s%s_rx.txt" % (outPath, basefile), 'wt') as f:
+	with open("%s%s%s_rx.txt" % (prefix, outPath, basefile), 'wt') as f:
 		f.write("Time [s],Value,Parity Error,Framing Error\n")
 		for x in range(lenR):
 			f.write("%.15f,0x%2.2X,,\n" % (R[x][0], R[x][1]))
 
 	T = serialTx.get_values()
 	lenT = len(T)
-	with open("%s%s_tx.txt" % (outPath, basefile), 'wt') as f:
+	# AEW edit
+	# with open("%s%s_tx.txt" % (outPath, basefile), 'wt') as f:
+	with open("%s%s%s_tx.txt" % (prefix, outPath, basefile), 'wt') as f:
 		f.write("Time [s],Value,Parity Error,Framing Error\n")
 		for x in range(lenT):
 			f.write("%.15f,0x%2.2X,,\n" % (T[x][0], T[x][1]))

@@ -541,6 +541,8 @@ except:
 
 base = os.path.basename(infilename)
 basefile = os.path.splitext(base)[0]
+# AEW edit
+prefix = infilename.replace(base, "")
 
 lastmodified= os.stat("%s"%(infilename)).st_mtime
 aa = time.localtime(lastmodified)
@@ -651,14 +653,18 @@ estr = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time()))
 if ASYNC_TO_FILE:
 	R = serialRx.get_values()
 	lenR = len(R)
-	with open("%s_motrx.txt" % (basefile), 'wt') as f:
+	# AEW edit
+	# with open("%s_motrx.txt" % (basefile), 'wt') as f:
+	with open("%s%s_motrx.txt" % (prefix, basefile), 'wt') as f:
 		f.write("Time [s],Value,Parity Error,Framing Error\n")
 		for x in range(lenR):
 			f.write("%.15f,0x%2.2X,,\n" % (R[x][0], R[x][1]))
 
 	T = serialTx.get_values()
 	lenT = len(T)
-	with open("%s_mottx.txt" % (basefile), 'wt') as f:
+	# AEW edit
+	# with open("%s_mottx.txt" % (basefile), 'wt') as f:
+	with open("%s%s_mottx.txt" % (prefix, basefile), 'wt') as f:
 		f.write("Time [s],Value,Parity Error,Framing Error\n")
 		for x in range(lenT):
 			f.write("%.15f,0x%2.2X,,\n" % (T[x][0], T[x][1]))
@@ -687,7 +693,9 @@ if DEBUG_RXTX:
 # Spindle Motor
 M = enc.get_entries()
 lenM = len(M)
-with open("%s_mot.bin" % (basefile), 'wb') as f:
+# AEW edit
+# with open("%s_mot.bin" % (basefile), 'wb') as f:
+with open("%s%s_mot.bin" % (prefix, basefile), 'wb') as f:
 	for x in range(lenM):
 		S = struct.pack("2f", M[x][0], M[x][1])
 		f.write (S)
