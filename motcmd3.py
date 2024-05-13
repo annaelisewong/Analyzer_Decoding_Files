@@ -206,10 +206,12 @@ class parse_host:
 
 		if cmd == 0x1a:
 			# use the "Update" to record complete motion 'update'
-			print ("Command: %10.6f <%2.2x> %s [%1d] %s {%10.6f, %10.6f}" % \
+			fileOut.write ("Command: %10.6f <%2.2x> %s [%1d] %s {%10.6f, %10.6f}\n" % \
 					(self.stxTime, p[2], cmdString, cmdLength, argString, self.updTime, self.updTime - self.updTimePrev))
+			# print ("Command: %10.6f <%2.2x> %s [%1d] %s {%10.6f, %10.6f}" % \
+			# 		(self.stxTime, p[2], cmdString, cmdLength, argString, self.updTime, self.updTime - self.updTimePrev))
 
-			self.CmdSummary.append("Cmd[%3.3d] % 11.6f % 11.6f %s %s %s" % \
+			self.CmdSummary.append("Cmd[%3.3d] % 11.6f % 11.6f %s %s %s\n" % \
 					(self.UpdateCount, self.stxTime, self.updTime - self.updTimePrev, self.ca, self.cd, self.cv)) 
 
 			self.updTimePrev = self.updTime
@@ -218,16 +220,16 @@ class parse_host:
 			self.cd = ""
 			self.cv = ""
 
-			print ("")
+			fileOut.write ("\n")
 		else:
-			print ("Command: %10.6f <%2.2x> %s [%1d] %s" % \
+			fileOut.write ("Command: %10.6f <%2.2x> %s [%1d] %s\n" % \
 					(self.stxTime, p[2], cmdString, cmdLength, argString))
 
 
 	def update(self, time_in, int_in, dir):
 		rs = ""
 		if VERBOSE3:
-			fileOut.write ("%11.6f %2.2x %d" % (time_in, int_in, dir))
+			fileOut.write ("%11.6f %2.2x %d\n" % (time_in, int_in, dir))
 
 		if dir == 0:
 			if self.state == 0:
@@ -249,7 +251,7 @@ class parse_host:
 			pass
 
 		else:
-			fileOut.write ("Packet Error")
+			fileOut.write ("Packet Error\n")
 	
 
 	def dump(self, e):
@@ -258,7 +260,7 @@ class parse_host:
 		else:
 			ss = parser.update(e[0], e[1], 1)
 		if VERBOSE3:
-			fileOut.write("\n")
+			fileOut.write("\n\n")
 
 	# parse_host
 
@@ -273,10 +275,15 @@ rxfilename = sys.argv[1]
 txfilename = sys.argv[2]
 out_text = 0
 
+outfilename = txfilename.replace("Group1_mottx", "MotCmdMsgOut")
+if os.path.exists(outfilename):
+	os.remove(outfilename)
+fileOut = open(outfilename, 'wt')
+
 startnow = time.localtime(time.time())
 tstr = time.strftime("%Y-%m-%d %H:%M:%S", startnow)
-print ("Starting ... %s" % (tstr))
-print ("Data files: \'%s\' \'%s\'" % (rxfilename, txfilename))
+fileOut.write ("Starting ... %s\n" % (tstr))
+fileOut.write ("Data files: \'%s\' \'%s\ \n'" % (rxfilename, txfilename))
 
 try:
 	fileRx = open(rxfilename, 'rt')
@@ -298,7 +305,7 @@ print( "Processing file  ... %s" % (ftstr))
 
 ststr = time.strftime("%Y%m%d%H%M%S", aa)[2:]
 """
-fileOut = sys.stdout
+# fileOut = sys.stdout
 
 #fileOut.write("Data file: %s of %s\n" % (infilename, ftstr))
 
@@ -364,21 +371,37 @@ while 1:
 
 # sort by time
 sortedSequence = sorted(sequence, key = lambda ent: ent[0])   # sort by timestamp
-print (len(sequence), numRxLines, numTxLines)
+# print (len(sequence), numRxLines, numTxLines)
+fileOut.write ("%d %d %d\n" % (len(sequence), numRxLines, numTxLines))
 
 # decode
 for i in range(len(sortedSequence)):
 	parser.dump(sortedSequence[i])
 
-# print summary
-print ("------------------------------------------------------------")
-print ("Summary")
-#print ("%4d messages to Controller" % (parser.countFromSBC))
-#print ("%4d messages to SBC" % (parser.countToSBC))
-print ("------------------------------------------------------------")
-print ("")
-print("          Time       Delta        A   D  Speed    ")
-print("          ---------- -----------  --  -- ---------")
-for i in range(len(parser.CmdSummary)):
-	print ("%s" % parser.CmdSummary[i])
+# # print summary
+# print ("------------------------------------------------------------")
+# print ("Summary")
+# #print ("%4d messages to Controller" % (parser.countFromSBC))
+# #print ("%4d messages to SBC" % (parser.countToSBC))
+# print ("------------------------------------------------------------")
+# print ("")
+# print("          Time       Delta        A   D  Speed    ")
+# print("          ---------- -----------  --  -- ---------")
+# for i in range(len(parser.CmdSummary)):
+# 	print ("%s" % parser.CmdSummary[i])
 
+
+
+# print summary
+fileOut.write ("------------------------------------------------------------\n")
+fileOut.write ("Summary\n")
+#fileOut.write ("%4d messages to Controller" % (parser.countFromSBC))
+#fileOut.write ("%4d messages to SBC" % (parser.countToSBC))
+fileOut.write ("------------------------------------------------------------\n")
+fileOut.write ("")
+fileOut.write("          Time       Delta        A   D  Speed    \n")
+fileOut.write("          ---------- -----------  --  -- ---------\n")
+for i in range(len(parser.CmdSummary)):
+	fileOut.write ("%s\n" % parser.CmdSummary[i])
+
+fileOut.close()

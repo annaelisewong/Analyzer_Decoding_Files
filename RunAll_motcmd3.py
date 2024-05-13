@@ -19,14 +19,14 @@ for rx_infilename, tx_infilename in zip(rx_file_list, tx_file_list):
 
     file_count += 1
 
-    outfilename = tx_infilename.replace("Group1_mottx", "MotCmdMsgOut")
-    if os.path.exists(outfilename):
-        os.remove(outfilename)
-    fileOut = open(outfilename, 'wt')
+    # outfilename = tx_infilename.replace("Group1_mottx", "MotCmdMsgOut")
+    # if os.path.exists(outfilename):
+    #     os.remove(outfilename)
+    # fileOut = open(outfilename, 'wt')
 
     print("(%d/%d) Running motcmd3.py %s %s" % (file_count, len(rx_file_list), tx_infilename, rx_infilename))
     # NOTE: Legacy devices (rx tx), Dev platforms (tx rx)
-    p = subprocess.Popen(["python3", "C:\\Users\\awong\\Documents\\Analyzer_Decoding_Files\\motcmd3.py", rx_infilename, tx_infilename], stdout=fileOut) # Legacy
-    # p = subprocess.Popen(["python3", "C:\\Users\\awong\\Documents\\Analyzer_Decoding_Files\\motcmd3.py", tx_infilename, rx_infilename], stdout=fileOut)
+    p = subprocess.Popen(["python3", "C:\\Users\\awong\\Documents\\Analyzer_Decoding_Files\\motcmd3.py", rx_infilename, tx_infilename]) # Legacy
+    # p = subprocess.Popen(["python3", "C:\\Users\\awong\\Documents\\Analyzer_Decoding_Files\\motcmd3.py", tx_infilename, rx_infilename])
     p.wait()
-    fileOut.close()
+    # fileOut.close()
