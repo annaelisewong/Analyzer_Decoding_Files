@@ -18,7 +18,10 @@ DEBUG2 = 0
 DEBUG3 = 0
 
 def usage():
-    print( "pc104decode3 <rx_file> <tx_file>")
+	print( "pc104decode3.py -r <rotor_name> [-b]")
+	print(" -r <rotor name> Full prefix name of rotor")
+	print(" -b Flag to indicate barcode dump file should be created")
+	sys.exit(0)
 
 HC_WAITSTX = 0
 HC_STX = 3
@@ -181,12 +184,12 @@ class parse_host:
 	
 			if s1 == "D" and s2 == "C":
 				c = "C<-S %7.3f: [%-2s] Door Close" % (self.stxTime, commandId)
-				print ("%s" % (c))
+				fileOut.write ("%s\n" % (c))
 				self.CmdSummary.append(c)
 
 			elif s1 == "D" and s2 == "O":
 				c = "C<-S %7.3f: [%-2s] Door Open" % (self.stxTime, commandId)
-				print ("%s" % (c))
+				fileOut.write ("%s\n" % (c))
 				self.CmdSummary.append(c)
 
 			elif s1 == "H":
@@ -226,7 +229,7 @@ class parse_host:
 				#c = "C<-S %7.3f: [%-2s] %s {%d %d %d %d %f}" % \
 				#		(self.stxTime, commandId, xxx, get16u(p,6), get16u(p,8), p[10], p[11], convert_to_float(get32i(p,12)))
 
-				print ("%s" % (c))
+				fileOut.write ("%s\n" % (c))
 				self.CmdSummary.append(c)
 				"""
 				topDac  5  2
@@ -246,13 +249,13 @@ class parse_host:
 				else:
 					xxx = "Unknown!"
 				c = "C<-S %7.3f: [%-2s] Begin Analysis {%s}" % (self.stxTime, commandId, xxx)
-				print ("%s" % (c))
+				fileOut.write ("%s\n" % (c))
 				self.CmdSummary.append(c)
 
 			elif s1 == "B" :
 				c = "C<-S %7.3f: [%-2s] Scan Barcode {%4.4x (bcDac) %3d %3d (cmDac) %3d %3d}" % \
 						(self.stxTime, commandId, get16u(p,4), p[6], p[7], p[8], p[9])
-				print ("%s" % (c))
+				fileOut.write ("%s\n" % (c))
 				self.CmdSummary.append(c)
 				"""
 				msg.data.engineMsg.message[0] = 'B';
@@ -271,7 +274,7 @@ class parse_host:
 				for i in range (10):
 					c += " %3d" % (p[5+i])
 				c += "}"
-				print ("%s" % (c))
+				fileOut.write ("%s\n" % (c))
 				self.CmdSummary.append(c)
 
 			elif s1 == "P" :
@@ -283,7 +286,7 @@ class parse_host:
 				else:
 					strout = "{not saved}"
 				c = "C<-S %7.3f: [%-2s] Send RIS File %s" % (self.stxTime, commandId, strout)
-				print ("%s" % (c))
+				fileOut.write ("%s\n" % (c))
 				self.CmdSummary.append(c)
 
 			elif s1 == "F" :
@@ -292,7 +295,7 @@ class parse_host:
 				for i in range (30):
 					 c += " %d" % (p[7+i])
 				c += "}"
-				print ("%s" % (c))
+				fileOut.write ("%s\n" % (c))
 				self.CmdSummary.append(c)
 				"""
 				msg.data.engineMsg.message[0] = 'F';
@@ -308,7 +311,7 @@ class parse_host:
 				"""
 
 			else:
-				print ("C<-S UNKNOWN %7.3f %s %s <%d>" % (self.stxTime, s1, s2, length))
+				fileOut.write ("C<-S UNKNOWN %7.3f %s %s <%d>\n" % (self.stxTime, s1, s2, length))
 
 		#
 		# ***  Outgoing from FPGA  ***
@@ -333,7 +336,7 @@ class parse_host:
 						break
 
 				c = "C->S %7.3f: [%-2s] Version Information SW %s FPGA %s" % (self.stxTime, commandId, vss, vsf)
-				print ("%s" % (c))
+				fileOut.write ("%s\n" % (c))
 				self.CmdSummary.append(c)
 				"""
 				engSoftwareVersion [4]);
@@ -342,7 +345,7 @@ class parse_host:
 
 			elif s1 == "?" :
 				c = "C->S %7.3f: [%-2s] Debug Msg \"%s\"" % (self.stxTime, commandId, ''.join(chr(e) for e in p[5:-5]))
-				print ("%s" % (c))
+				fileOut.write ("%s\n" % (c))
 				self.CmdSummary.append(c)
 
 			elif s1 == "R" :
@@ -363,7 +366,7 @@ class parse_host:
 				for i in range (10):
 					c += " %5d" % (get16u(p,14-1+2*i))
 				c += "}"
-				print ("%s" % (c))
+				fileOut.write ("%s\n" % (c))
 				"""
 				"Timestamp", get32u(p,6-1)))
 				"Cuv", p[10-1]))
@@ -382,7 +385,7 @@ class parse_host:
 									      get16u(p,16-1), get16u(p,18-1), get16u(p,20-1))
 				c += " { %5.2f %5.2f %5.2f %5.2f %8.6f %8.6f }" % \
 							(Tcalcs[0], Tcalcs[1], Tcalcs[2], Tcalcs[3], Tcalcs[4], Tcalcs[5])
-				print ("%s" % (c))
+				fileOut.write ("%s\n" % (c))
 				self.CmdSummary.append(c)
 				"""
 				memcpy( &t->engineTime, &rxFrame[6], 4 );
@@ -403,7 +406,7 @@ class parse_host:
 									      get16u(p,16-1), get16u(p,18-1), get16u(p,20-1))
 				c += " { %5.2f %5.2f %5.2f %5.2f %8.6f %8.6f }" % \
 							(Tcalcs[0], Tcalcs[1], Tcalcs[2], Tcalcs[3], Tcalcs[4], Tcalcs[5])
-				print ("%s" % (c))
+				fileOut.write ("%s\n" % (c))
 				self.CmdSummary.append(c)
 				"""
 				uint32 engineTime
@@ -424,7 +427,7 @@ class parse_host:
 				else:
 					strout = "{not saved}"
 				c = "C->S %7.3f: [%-2s] Barcode Data %s" % (self.stxTime, commandId, strout)
-				print ("%s" % (c))
+				fileOut.write ("%s\n" % (c))
 				self.CmdSummary.append(c)
 
 			elif s1 == "A" :
@@ -435,7 +438,7 @@ class parse_host:
 				c = "C->S %7.3f: [%-2s] Analysis Status {%10.10u %3u \'%s\'}" % \
 					(self.stxTime,  commandId, get32u(p,6-1), p[11-1], xx)
 
-				print ("%s" % (c))
+				fileOut.write ("%s\n" % (c))
 				self.CmdSummary.append(c)
 				"""
 				"Timestamp", get32u(p,6-1)))
@@ -460,7 +463,7 @@ class parse_host:
 					strout += "\"Unknown!\" "
 
 				c = "C->S %7.3f: [%-2s] Drawer Status 0x%2.2x %s" % (self.stxTime, commandId, status, strout)
-				print ("%s" % (c))
+				fileOut.write ("%s\n" % (c))
 				self.CmdSummary.append(c)
 				"""
 				if ( status & 0x80 )		// Drawer jammed
@@ -471,7 +474,7 @@ class parse_host:
 			elif s1 == "X" :
 				c = "C->S %7.3f: [%-2s] ADC reference offset {%10.10u %4u}" % \
 					(self.stxTime,  commandId, get32u(p,6-1), get16u(p, 10-1))
-				print ("%s" % (c))
+				fileOut.write ("%s\n" % (c))
 				self.CmdSummary.append(c)
 				"""
 				time 6
@@ -481,14 +484,14 @@ class parse_host:
 			elif s1 == "Z" :
 				# Exception two Nulls
 				c = "C->S %7.3f: [%1s ] Asynchronous Engine Reset indicated {%2.2x %2.2x}" % (self.stxTime, chr(p[1]), p[2], p[3])
-				print ("%s" % (c))
+				fileOut.write ("%s\n" % (c))
 				self.CmdSummary.append(c)
 
 			else:
-				print ("C->S UNKNOWN %7.3f %s %s <%d>" % (self.stxTime, s1, s2, length))
+				fileOut.write ("C->S UNKNOWN %7.3f %s %s <%d>\n" % (self.stxTime, s1, s2, length))
 
 		else:
-			print("Dir Error")
+			fileOut.write("Dir Error\n")
 
 	#
 	#
@@ -537,7 +540,7 @@ class parse_host:
 		elif self.state == HC_STX:
 			self.stxTime = time_in
 			self.StxCount += 1 # AEW DEBUG, TODO delete later
-			print("AEW DEBUG: STX time = %f, STX count = %d" % (self.stxTime, self.StxCount))
+			# print("AEW DEBUG: STX time = %f, STX count = %d" % (self.stxTime, self.StxCount))
 			self.state = HC_PLD
 			self.inPayload = 0
 			self.payload = []
@@ -636,35 +639,66 @@ class parse_host:
 #
 #
 argc = len(sys.argv)
-if argc < 3:
+if argc < 2:
     usage()
     sys.exit(0)
 
 # cmd line defaults
-risfilename = ''
-barfilename = ''
-rxfilename = sys.argv[1]
-txfilename = sys.argv[2]
+# risfilename = ''
+# barfilename = ''
+# rxfilename = sys.argv[1]
+# txfilename = sys.argv[2]
 
-if argc > 3:
-	risfilename = sys.argv[3]
-	try:
-		fileRis = open(risfilename, 'wb')
-	except:
-		print( "Could not open RIS dump file %s" % (risfilename))
-		sys.exit(1)
+# if argc > 3:
+# 	risfilename = sys.argv[3]
+# 	try:
+# 		fileRis = open(risfilename, 'wb')
+# 	except:
+# 		print( "Could not open RIS dump file %s" % (risfilename))
+# 		sys.exit(1)
 
-if argc > 4:
-	barfilename = sys.argv[4]
-	try:
-		fileBar = open(barfilename, 'wb')
-	except:
-		print( "Could not open Barcode dump file %s" % (barfilename))
-		sys.exit(1)
+# if argc > 4:
+# 	barfilename = sys.argv[4]
+# 	try:
+# 		fileBar = open(barfilename, 'wb')
+# 	except:
+# 		print( "Could not open Barcode dump file %s" % (barfilename))
+# 		sys.exit(1)
 
-startnow = time.localtime(time.time())
-tstr = time.strftime("%Y-%m-%d %H:%M:%S", startnow)
-#print ("Starting ... %s" % (tstr))
+# startnow = time.localtime(time.time())
+# tstr = time.strftime("%Y-%m-%d %H:%M:%S", startnow)
+# #print ("Starting ... %s" % (tstr))
+
+# Parse the command line options
+try:
+    opts, args = getopt.getopt(sys.argv[1:], "r:b")
+except getopt.error:
+    usage()
+    sys.exit(2)
+
+# Process options
+rotor_name = ""
+CREATE_BC_DUMP_FILE = False
+
+for o, a in opts:
+	if o == "-r":
+		rotor_name = a
+	elif o == "-b":
+		CREATE_BC_DUMP_FILE = True
+
+if rotor_name == "":
+	usage()
+
+rotor_filepath = os.path.split(rotor_name)[0]
+rotor_basename = os.path.split(rotor_name)[1]
+
+rxfilename = rotor_filepath + "\Serial" + rotor_basename + "_Group0_rx.txt"
+txfilename = rotor_filepath + "\Serial" + rotor_basename + "_Group0_tx.txt"
+risfilename = rotor_name + "_RIS.bin"
+barfilename = ""
+
+if CREATE_BC_DUMP_FILE:
+	barfilename = rotor_name + "_barcode.bin"
 
 try:
 	fileRx = open(rxfilename, 'rt')
@@ -678,6 +712,19 @@ except:
 	print( "Could not open input Tx file %s" % (txfilename))
 	sys.exit(1)
 
+try:
+	fileRis = open(risfilename, 'wb')
+except:
+	print( "Could not open RIS dump file %s" % (risfilename))
+	sys.exit(1)
+
+if CREATE_BC_DUMP_FILE:
+	try:
+		fileBar = open(barfilename, 'wb')
+	except:
+		print( "Could not open Barcode dump file %s" % (barfilename))
+		sys.exit(1)
+
 """
 lastmodified= os.stat("%s"%(infilename)).st_mtime
 aa = time.localtime(lastmodified)
@@ -687,7 +734,14 @@ print( "Processing file  ... %s" % (ftstr))
 ststr = time.strftime("%Y%m%d%H%M%S", aa)[2:]
 """
 
-fileOut = sys.stdout
+outfilename = rotor_name + "_MsgOut.txt"
+try:
+	fileOut = open(outfilename, "wt")
+except:
+	print("Could not open %s" % outfilename)
+	sys.exit(1)
+
+# fileOut = sys.stdout
 #fileOut.write("Data file: %s of %s\n" % (infilename, ftstr))
 fileOut.write("\n")
 
@@ -755,7 +809,7 @@ while 1:
 # Sort by time
 #
 sortedSequence = sorted(sequence, key = lambda ent: ent[0])   # sort by timestamp
-print (len(sequence), numRxLines, numTxLines)
+fileOut.write ("%d %d %d\n" % (len(sequence), numRxLines, numTxLines))
 
 
 #
@@ -772,12 +826,12 @@ for i in range(len(sortedSequence)):
 #
 # Print summary
 #
-print ("------------------------------------------------------------")
-print ("Summary")
-print ("%4d messages to Controller" % (parser.countFromSBC))
-print ("%4d messages to SBC" % (parser.countToSBC))
-# print ("AEW DEBUG: %d" % len(sortedSequence))
-print ("------------------------------------------------------------")
-print ("")
+fileOut.write ("------------------------------------------------------------\n")
+fileOut.write ("Summary\n")
+fileOut.write ("%4d messages to Controller\n" % (parser.countFromSBC))
+fileOut.write ("%4d messages to SBC\n" % (parser.countToSBC))
+# fileOut.write ("AEW DEBUG: %d" % len(sortedSequence))
+fileOut.write ("------------------------------------------------------------\n")
+fileOut.write ("\n")
 for i in range(len(parser.CmdSummary)):
-	print ("%s" % parser.CmdSummary[i])
+	fileOut.write ("%s\n" % parser.CmdSummary[i])
