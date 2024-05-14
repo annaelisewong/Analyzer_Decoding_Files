@@ -266,14 +266,29 @@ class parse_host:
 
 
 argc = len(sys.argv)
-if argc < 3:
+if argc < 2:
     usage()
     sys.exit(0)
 
 # cmd line defaults
-rxfilename = sys.argv[1]
-txfilename = sys.argv[2]
-out_text = 0
+# rxfilename = sys.argv[1]
+# txfilename = sys.argv[2]
+
+try:
+	opts, args = getopt.getopt(sys.argv[1:], "r:")
+except getopt.error:
+	usage()
+	sys.exit(2)
+
+# Process options
+rotor_name = ""
+     
+for o, a in opts:
+    if o == "-r":
+        rotor_name = a
+
+rxfilename = rotor_name + "_Group1_motrx.txt"
+txfilename = rotor_name + "_Group1_mottx.txt"
 
 outfilename = txfilename.replace("Group1_mottx", "MotCmdMsgOut")
 if os.path.exists(outfilename):
