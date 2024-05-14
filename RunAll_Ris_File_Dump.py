@@ -22,12 +22,14 @@ for infilename in file_list:
 
     print("(%d/%d) Starting %s" % (file_count, len(file_list), infilename))
 
-    outfilename = infilename.replace(".bin", "_Readable.txt")
+    rotor_name = infilename.replace("_RIS.bin", "")
 
-    if os.path.exists(outfilename):
-        os.remove(outfilename)
+    # outfilename = infilename.replace(".bin", "_Readable.txt")
+
+    # if os.path.exists(outfilename):
+    #     os.remove(outfilename)
 
     # fileOut = open(outfilename, 'wt')
-    p = subprocess.Popen(["python3", "C:\\Users\\awong\\Documents\\Analyzer_Decoding_Files\\Ris_File_Dump.py", "-i", infilename, "-o", outfilename])
+    p = subprocess.Popen(["python3", "C:\\Users\\awong\\Documents\\Analyzer_Decoding_Files\\Ris_File_Dump.py", "-r", rotor_name])
     p.wait()
     # fileOut.close()

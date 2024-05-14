@@ -130,6 +130,11 @@ def sample_to_string(st):
 		str = "<Analyte @ %d>" % (st)
 	return str
 
+def usage():
+	print("Ris_File_Dump.py -r <rotor_name>")
+	print("  -r Prefix of the rotor name")
+	sys.exit(0)
+
 
 startnow = time.localtime(time.time())
 tstr = time.strftime("%Y-%m-%d %H:%M:%S", startnow)
@@ -144,28 +149,36 @@ useRaw = 0
 # parse command line options
 #
 try:
-    opts, args = getopt.getopt(sys.argv[1:], "i:o:r")
+    # opts, args = getopt.getopt(sys.argv[1:], "i:o:r")
+	opts, args = getopt.getopt(sys.argv[1:], "r:")
 except getopt.error:
     usage()
     sys.exit(2)
 
 # process options
-for o, a in opts:
-    if o == "-i":
-        inFileName = a
-    elif o == "-o":
-        outFileName = a
-    elif o == "-r":
-        useRaw = 1
+rotor_name = ""
 
-if inFileName == '':
+for o, a in opts:
+#     if o == "-i":
+#         inFileName = a
+#     elif o == "-o":
+#         outFileName = a
+#     elif o == "-r":
+#         useRaw = 1
+	if o == "-r":
+		rotor_name = a
+
+if rotor_name == '':
     usage()
     sys.exit(1)
+
+inFileName = rotor_name + "_RIS.bin"
+outFileName = rotor_name + "_RIS_Readable.txt"
 
 base = os.path.basename(inFileName)
 basefile = os.path.splitext(base)[0]
 baseext = os.path.splitext(base)[1]
-print ("%s %s %s" % (base, basefile, baseext))
+# print ("%s %s %s" % (base, basefile, baseext))
 
 lastmodified= os.stat("%s"%(inFileName)).st_mtime
 aa = time.localtime(lastmodified)
