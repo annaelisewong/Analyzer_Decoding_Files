@@ -6,9 +6,10 @@ import getopt
 # If run without any arguments, print the usage function
 
 def usage():
-    print("check_ris_sample_command.py -r <rotor name> [-o]")
+    print("check_ris_sample_command.py -r <rotor name> [-o] [-h]")
     print(" -r <rotor name> Full prefix name of rotor")
     print(" -o Flag to indicate output file should be created")
+    print(" -h Print input flag options")
     sys.exit(0)
 
 
@@ -44,6 +45,8 @@ for o, a in opts:
         rotor_name = a
     elif o == "-o":
         CREATE_OUTPUT_FILE = True
+    elif o == "-h":
+        usage()
 
 if rotor_name == "":
     usage()
