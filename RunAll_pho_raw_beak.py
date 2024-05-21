@@ -63,6 +63,7 @@ for infilename in file_list:
     line = [l.strip() for l in line.split()]
     # NOTE: 2 options for rounding the value: (1) using the floor of the float value, or (2) rounding the float value up or down respective to the dec value
     gcd = math.floor(int(line[7]) * 1.6)
+    print(infilename)
     datafilename = os.path.splitext(infilename)[0].replace("MsgOut", "Group0") + ".csv"
     datafilename = datafilename.replace("Reports", "Exports")
     fileOut.write(f"{datafilename}, {gcd}\n")
@@ -79,6 +80,7 @@ fileIn = open(infilename, 'rt')
 
 file_count = 1
 line = fileIn.readline()
+print(line)
 
 while line:
     line = fileIn.readline()
