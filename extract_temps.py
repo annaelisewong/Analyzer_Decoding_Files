@@ -414,8 +414,9 @@ p_infilename = rotor_name + "_PhaseTimestampsOut.txt"
 m_infilename = rotor_name + "_MsgOut.txt"
 
 if not os.path.isfile(p_infilename):
-    print("Phase timestamps file does not exist. Exiting now.")
-    sys.exit(1)
+    # print("Phase timestamps file does not exist. Exiting now.")
+    # sys.exit(1)
+    TIMESTAMP_OVERLAY = False
 
 # # In case I forgot to grab the phase timestamps
 # if not os.path.isfile(p_infilename):
@@ -440,20 +441,23 @@ ambTemp, ambTempTime, topTemp, topTempTime, botTemp, botTempTime, rtrTemp, rtrTe
 fileIn.close()
 
 # Parse PhaseTimestampsOut file
-try:
-    fileIn = open(p_infilename, 'rt')
-except:
-    print("Could not open file %s" % p_infilename)
-    TIMESTAMP_OVERLAY = False
-    # sys.exit(1)
+if TIMESTAMP_OVERLAY:
+    try:
+        fileIn = open(p_infilename, 'rt')
+    except:
+        print("Could not open file %s" % p_infilename)
+        TIMESTAMP_OVERLAY = False
+        # sys.exit(1)
 
-if fileIn:
+    phaseT = []
+    phaseNames = []
+
     print("Extracting phase timestamps for %s" % p_infilename)
     phaseT, phaseNames = extractPhaseTimestamps(fileIn)
     fileIn.close()
 
-# Extract temperature readings per each 
-ambPhaseTemps, topPhaseTemps, botPhaseTemps, rtrPhaseTemps = extractPhaseTemps(ambTemp, ambTempTime, topTemp, topTempTime, botTemp, botTempTime, rtrTemp, rtrTempTime, phaseT)
+    # Extract temperature readings per each 
+    ambPhaseTemps, topPhaseTemps, botPhaseTemps, rtrPhaseTemps = extractPhaseTemps(ambTemp, ambTempTime, topTemp, topTempTime, botTemp, botTempTime, rtrTemp, rtrTempTime, phaseT)
 
 if CREATE_OUTPUT_FILE:
     outfilename = rotor_name + "_TempStatsOut.txt"
@@ -463,15 +467,18 @@ if CREATE_OUTPUT_FILE:
     fileOut.close()
 
 # Parse MsgOut file
-try:
-    fileIn = open(m_infilename, 'rt')
-except:
-    print("Could not open file %s" % m_infilename)
-    sys.exit(1)
+if os.path.isfile(m_infilename):
+    try:
+        fileIn = open(m_infilename, 'rt')
+    except:
+        print("Could not open file %s" % m_infilename)
+        # sys.exit(1)
 
-dacT, tempT = extractMsgOut(fileIn)
+    dacT = []
+    tempT = []
 
-fileIn.close()
+    dacT, tempT = extractMsgOut(fileIn)
+    fileIn.close()
 
 # Plot extracted values
 
