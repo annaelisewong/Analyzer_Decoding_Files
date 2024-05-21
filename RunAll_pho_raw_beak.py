@@ -78,6 +78,7 @@ infilename = "gcd_values.csv"
 fileIn = open(infilename, 'rt')
 
 file_count = 1
+line = fileIn.readline()
 
 while line:
     line = fileIn.readline()

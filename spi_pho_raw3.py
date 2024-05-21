@@ -361,7 +361,7 @@ class parse_cuv:
 					
 				if ((dc - self.prevDC) > 0.12) and periodff > 0.001290 and periodff < 0.001450:
 					if self.pulseCount != 0: 
-						print (" Beak Error!")
+						fileOut.write (" Beak Error!\n")
 
 			if self.pulseCount == 0:
 				self.lastIndexRE = self.timeRE
@@ -491,15 +491,15 @@ class parse_DacA:
 		self.val = ((mosiBytes[0] & 0x0f) << 4) + ((mosiBytes[1] & 0xf0) >> 4)
 		lenMosi = len(mosiBytes)
 		lenMiso = len(misoBytes)
-		print ("DAC_PHO %10.6f (" % (begin), end='')
+		fileOut.write ("DAC_PHO %10.6f (" % (begin))
 		for m in range (lenMosi):
-			print (" %4.4x" % (mosiBytes[m]), end='')
-		print (" ) { ", end='')
+			fileOut.write (" %4.4x" % (mosiBytes[m]))
+		fileOut.write (" ) { ")
 		for m in range (lenMosi):
 			if (mosiBytes[m] & 0x0300) == 0x0300:
-				print ("%1d %-5s %3d " % \
-						(self.sequenceNum, self.channel[self.sequenceNum], 0xff & mosiBytes[m]), end='')
-		print ("}")
+				fileOut.write ("%1d %-5s %3d " % \
+						(self.sequenceNum, self.channel[self.sequenceNum], 0xff & mosiBytes[m]))
+		fileOut.write ("}\n")
 		self.sequenceNum += 1
 		if self.sequenceNum >= 10:
 			self.sequenceNum = 0
@@ -584,10 +584,9 @@ class parse_spi_d:
 # usage()
 #
 def usage():
-    print( "spi_pho_raw3 -i <input file> [-v <verbosity_level>] [-o <output_file>] [-a <dest_path>]")
-    print( " -i <Input file> from Saleae export ")
-    print( " -v <Verbosity>")
-    print( " -o <Output file> save results")
+    print( "spi_pho_raw3 -i <rotor_name> [-v <verbosity_level>] [-a <dest_path>]")
+    print( " -r Rotor name ")
+    print( " -v Verbosity")
     print( " -a Save separate AsyncSerial Rx and Tx files")
 	
 # ##########
@@ -603,7 +602,7 @@ tstr = time.strftime("%Y-%m-%d %H:%M:%S", startTime)
 
 # cmd line defaults
 infilename = ''
-outFileName = ''
+outfilename = ''
 out_text = 0
 verbosity = 0
 ASYNC_TO_FILE = 0
@@ -613,26 +612,29 @@ outPath = ''
 # parse command line options
 #
 try:
-	opts, args = getopt.getopt(sys.argv[1:], "i:v:o:a:")
+	opts, args = getopt.getopt(sys.argv[1:], "r:v:a:")
 except getopt.error:
 	usage()
 	sys.exit(2)
 
 # process options
+rotor_name = ""
+
 for o, a in opts:
-	if o == "-i":
-		infilename = a
+	if o == "-r":
+		rotor_name = a
 	elif o == "-v":
 		verbosity = int(a)
-	elif o == "-o":
-		outFileName = a
 	elif o == "-a":
 		ASYNC_TO_FILE = 1
 		outPath = a
 
-if infilename == '':
+if rotor_name == '':
 	usage()
 	sys.exit(1)
+
+infilename = rotor_name + "_Group0.csv"
+outfilename = rotor_name + "_Group0Data.txt"
 
 try:
 	fileIn = open(infilename, 'rt')
@@ -651,11 +653,11 @@ ftstr = time.strftime("%Y-%m-%d %H:%M:%S", aa)
 
 ststr = time.strftime("%Y%m%d%H%M%S", aa)[2:]
 
-if outFileName != "":
+if outfilename != "":
 	try:
-		fileOut = open(outFileName, 'wt')
+		fileOut = open(outfilename, 'wt')
 	except:
-		print( "Could not open output file %s" % (outFileName))
+		print( "Could not open output file %s" % (outfilename))
 		sys.exit(1)
 else:
 	fileOut = sys.stdout

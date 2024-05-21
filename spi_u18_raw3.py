@@ -158,11 +158,11 @@ class parse_DacA:
 		self.val = ((mosiBytes[0] & 0x0f) << 4) + ((mosiBytes[1] & 0xf0) >> 4)
 		lenMosi = len(mosiBytes)
 		lenMiso = len(misoBytes)
-		print ("DacA w  %10.6f %1d %1d %1d %-11s %3d (" % \
-				(begin, self.addr, self.pwr, self.spd, self.channel[self.addr], self.val), end='')
+		fileOut.write ("DacA w  %10.6f %1d %1d %1d %-11s %3d (" % \
+				(begin, self.addr, self.pwr, self.spd, self.channel[self.addr], self.val))
 		for m in range (lenMosi):
-			print (" %2.2x" % (mosiBytes[m]), end='')
-		print (" )")
+			fileOut.write (" %2.2x" % (mosiBytes[m]))
+		fileOut.write (" )\n")
 
 #
 # parse_DacB:
@@ -183,11 +183,11 @@ class parse_DacB:
 		self.val = ((mosiBytes[0] & 0x0f) << 4) + ((mosiBytes[1] & 0xf0) >> 4)
 		lenMosi = len(mosiBytes)
 		lenMiso = len(misoBytes)
-		print ("DacB w  %10.6f %1d %1d %1d %-11s %3d (" % \
-				(begin, self.addr, self.pwr, self.spd, self.channel[self.addr], self.val), end='')
+		fileOut.write ("DacB w  %10.6f %1d %1d %1d %-11s %3d (" % \
+				(begin, self.addr, self.pwr, self.spd, self.channel[self.addr], self.val))
 		for m in range (lenMosi):
-			print (" %2.2x" % (mosiBytes[m]), end='')
-		print (" )")
+			fileOut.write (" %2.2x" % (mosiBytes[m]))
+		fileOut.write (" )\n")
 
 
 #
@@ -206,10 +206,10 @@ class parse_TempSense:
 		self.temperature = float(self.val) * 0.0625
 		lenMosi = len(mosiBytes)
 		lenMiso = len(misoBytes)
-		print ("Temp r  %10.6f %1d %5.1f (" % (begin, self.sign, self.temperature), end='')
+		fileOut.write ("Temp r  %10.6f %1d %5.1f (" % (begin, self.sign, self.temperature))
 		for m in range (lenMiso):
-			print (" %2.2x" % (misoBytes[m]), end='')
-		print (" )")
+			fileOut.write (" %2.2x" % (misoBytes[m]))
+		fileOut.write (" )\n")
 
 
 #
@@ -480,10 +480,9 @@ class parse_AsyncSerial:
 # usage()
 #
 def usage():
-    print( "spi_u18_raw3 -i <input file> [-v <verbosity_level>] [-o <output_file>] [-a]")
-    print( " -i <Input file> from Saleae export ")
-    print( " -v <Verbosity>")
-    print( " -o <Output file> save results")
+    print( "spi_u18_raw3 -r <rotor name> [-v <verbosity_level>] [-a]")
+    print( " -r Rotor name ")
+    print( " -v Verbosity")
     print( " -a Save separate AsyncSerial Rx and Tx files")
 	
 # ##########
@@ -499,7 +498,7 @@ tstr = time.strftime("%Y-%m-%d %H:%M:%S", startTime)
 
 # cmd line defaults
 infilename = ''
-outFileName = ''
+outfilename = ''
 out_text = 0
 verbosity = 0
 ASYNC_TO_FILE = 0
@@ -508,19 +507,19 @@ ASYNC_TO_FILE = 0
 # parse command line options
 #
 try:
-	opts, args = getopt.getopt(sys.argv[1:], "i:v:o:a")
+	opts, args = getopt.getopt(sys.argv[1:], "r:v:a")
 except getopt.error:
 	usage()
 	sys.exit(2)
 
 # process options
+rotor_name = ""
+
 for o, a in opts:
-	if o == "-i":
-		infilename = a
+	if o == "-r":
+		rotor_name = a
 	elif o == "-v":
 		verbosity = int(a)
-	elif o == "-o":
-		outFileName = a
 	elif o == "-a":
 		ASYNC_TO_FILE = 1
 
@@ -529,9 +528,12 @@ for o, a in opts:
 # -a parse and save ADC + DAC + Temperature
 # -m parse and save Enc + MotRx + MotTx
 
-if infilename == '':
+if rotor_name == '':
 	usage()
 	sys.exit(1)
+
+infilename = rotor_name + "_Group1.csv"
+outfilename = rotor_name + "_Group1Data.txt"
 
 try:
 	fileIn = open(infilename, 'rt')
@@ -550,11 +552,11 @@ ftstr = time.strftime("%Y-%m-%d %H:%M:%S", aa)
 
 ststr = time.strftime("%Y%m%d%H%M%S", aa)[2:]
 
-if outFileName != "":
+if outfilename != "":
 	try:
-		fileOut = open(outFileName, 'wt')
+		fileOut = open(outfilename, 'wt')
 	except:
-		print( "Could not open output file %s" % (outFileName))
+		print( "Could not open output file %s" % (outfilename))
 		sys.exit(1)
 else:
 	fileOut = sys.stdout

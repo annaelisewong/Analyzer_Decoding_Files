@@ -38,6 +38,6 @@ for file in file_list:
     #     os.remove(outfilename)
 
     # fileOut = open(outfilename, 'wt')
-    p = subprocess.Popen(["python3", "C:\\Users\\awong\\Documents\\Analyzer_Decoding_Files\\pc104decode3.py", "-r", rotor_name, "-a", "Serial"])
+    p = subprocess.Popen(["python3", "C:\\Users\\awong\\Documents\\Analyzer_Decoding_Files\\pc104decode3.py", "-r", rotor_name])
     p.wait()
     # fileOut.close()

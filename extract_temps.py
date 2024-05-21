@@ -444,11 +444,13 @@ try:
     fileIn = open(p_infilename, 'rt')
 except:
     print("Could not open file %s" % p_infilename)
-    sys.exit(1)
+    TIMESTAMP_OVERLAY = False
+    # sys.exit(1)
 
-print("Extracting phase timestamps for %s" % p_infilename)
-phaseT, phaseNames = extractPhaseTimestamps(fileIn)
-fileIn.close()
+if fileIn:
+    print("Extracting phase timestamps for %s" % p_infilename)
+    phaseT, phaseNames = extractPhaseTimestamps(fileIn)
+    fileIn.close()
 
 # Extract temperature readings per each 
 ambPhaseTemps, topPhaseTemps, botPhaseTemps, rtrPhaseTemps = extractPhaseTemps(ambTemp, ambTempTime, topTemp, topTempTime, botTemp, botTempTime, rtrTemp, rtrTempTime, phaseT)

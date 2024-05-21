@@ -24,12 +24,12 @@ for infilename in file_list:
 
     rotor_name = infilename.replace("_Group1.csv", "")
 
-    outfilename = rotor_name + "_Group1Data.txt"
+    # outfilename = rotor_name + "_Group1Data.txt"
 
-    if os.path.exists(outfilename):
-        os.remove(outfilename)
+    # if os.path.exists(outfilename):
+    #     os.remove(outfilename)
 
-    fileOut = open(outfilename, 'wt')
-    p = subprocess.Popen(["python3", "C:\\Users\\awong\\Documents\\Analyzer_Decoding_Files\\spi_u18_raw3.py", "-i", infilename, "-a"], stdout=fileOut)
+    # fileOut = open(outfilename, 'wt')
+    p = subprocess.Popen(["python3", "C:\\Users\\awong\\Documents\\Analyzer_Decoding_Files\\spi_u18_raw3.py", "-r", rotor_name, "-a"])
     p.wait()
-    fileOut.close()
+    # fileOut.close()

@@ -11,8 +11,6 @@ if argc > 2:
     sys.exit(0)
 elif argc == 2:
     file_list = [sys.argv[1]]
-
-## Part 1: Extract the GCD values for each file
     
 file_count = 1
 total_files = len(file_list)
@@ -21,23 +19,23 @@ for infilename in file_list:
 
     if infilename == "":
         print("No file name detected.")
-        continue #sys.exit(1)
+        continue
 
-    # print("MsgOut file: %s" % (infilename))
+    rotor_name = infilename.replace("_Group0.csv", "")
 
-    try:
-        fileIn = open(infilename, 'rt')
-    except:
-        print("Could not open input file %s" % (infilename))
-        continue #sys.exit(1)
+    # try:
+    #     fileIn = open(infilename, 'rt')
+    # except:
+    #     print("Could not open input file %s" % (infilename))
+    #     continue #sys.exit(1)
     
-    outfilename = os.path.splitext(infilename)[0] + "Data.txt"
+    # outfilename = os.path.splitext(infilename)[0] + "Data.txt"
 
     print("(%d/%d) Running: spi_pho_raw3.py for %s" % (file_count, total_files, infilename))
-    print("        Output file: %s" % outfilename)
-    fileOut = open(outfilename, 'wt')
-    p = subprocess.Popen(["python3", "C:\\Users\\awong\\Documents\\Analyzer_Decoding_Files\\spi_pho_raw3.py", "-i", infilename, "-a", "Serial"], stdout=fileOut)
+    # print("        Output file: %s" % outfilename)
+    # fileOut = open(outfilename, 'wt')
+    p = subprocess.Popen(["python3", "C:\\Users\\awong\\Documents\\Analyzer_Decoding_Files\\spi_pho_raw3.py", "-r", rotor_name, "-a", "Serial"])
     p.wait()
-    fileOut.close()
-    fileIn.close()
+    # fileOut.close()
+    # fileIn.close()
     file_count += 1
