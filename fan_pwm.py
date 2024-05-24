@@ -381,25 +381,29 @@ class parse_fanPWM:
 	def __init__(self):
 		self.state = 0
 		self.thisTime = 0.0
-		self.prevTime = -2000.0
+		self.prevRisingEdgeT = -2000.0
+		self.fallingEdgeT = -2000.0
 		self.direction = 0
 		self.countFanEdge = 0
 		self.Entries = []
+		self.period = []
 
 	def update(self, cv, ev):
 		# Rising edge on FAN_PWM
 		if (ev[IDX_FAN_PWM] == 1) and (cv[IDX_FAN_PWM] == 1):
-			fileOut.write("FAN_PWM  %f  Rising\n" % cv[IDX_TIME])
-			print("FAN_PWM  %f  Rising" % cv[IDX_TIME])
+			deltaT = self.thisTime - self.prevRisingEdgeT
+			fileOut.write("FAN_PWM  %10f  Rising\n" % cv[IDX_TIME])
+			# print("FAN_PWM  %f  Rising  %30.20f" % (cv[IDX_TIME], deltaT))
 			self.thisTime = cv[IDX_TIME]
-			deltaT = self.thisTime - self.prevTime
+			self.prevRisingEdgeT = self.thisTime
+			self.period.append(deltaT)
 
 			# filter out glitches
 			if deltaT > 0.000001:
 				self.direction = 1
 				self.Entries.append((self.thisTime, self.direction))
 				self.countFanEdge += 1
-				self.prevTime = self.thisTime
+				# self.prevTime = self.thisTime
 
 		# High FAN_PWM
 		elif (ev[IDX_FAN_PWM] == 0) and (cv[IDX_FAN_PWM] == 1):
@@ -408,17 +412,17 @@ class parse_fanPWM:
 
 		# Falling edge on FAN_PWM
 		elif(ev[IDX_FAN_PWM] == 1) and (cv[IDX_FAN_PWM] == 0):
-			fileOut.write("FAN_PWM  %f  Falling\n" % cv[IDX_TIME])
-			print("FAN_PWM  %f  Falling" % cv[IDX_TIME])
+			fileOut.write("FAN_PWM  %10f  Falling\n" % cv[IDX_TIME])
+			# print("FAN_PWM  %f  Falling" % cv[IDX_TIME])
 			self.thisTime = cv[IDX_TIME]
-			deltaT = self.thisTime - self.prevTime
+			deltaT = self.thisTime - self.prevRisingEdgeT
 
 			# filter out glitches
 			if deltaT > 0.000001:
 				self.direction = 0
 				self.Entries.append((self.thisTime, self.direction))
 				self.countFanEdge += 1
-				self.prevTime = self.thisTime
+				# self.prevRisingEdgeT = self.thisTime
 
 		# Low FAN_PWM
 		elif (ev[IDX_FAN_PWM] == 0) and (cv[IDX_FAN_PWM] == 0):
@@ -430,87 +434,87 @@ class parse_fanPWM:
 
 #------------------------------------------------------------------------------------------------------------------------#
 
-class parse_AsyncSerial:
-	def __init__(self, idx):
-		self.startTime = 0.0
-		self.thisTime = 0.0
-		self.prevTime = -2000.0
-		self.byte = 0x00
-		self.bitCounter = 0
-		self.Entries = []
-		self.Values = []
-		self.idx = idx
-		self.bitsComb = 0
-		self.bidx = 0
-		self.debugstr = ""
+# class parse_AsyncSerial:
+# 	def __init__(self, idx):
+# 		self.startTime = 0.0
+# 		self.thisTime = 0.0
+# 		self.prevTime = -2000.0
+# 		self.byte = 0x00
+# 		self.bitCounter = 0
+# 		self.Entries = []
+# 		self.Values = []
+# 		self.idx = idx
+# 		self.bitsComb = 0
+# 		self.bidx = 0
+# 		self.debugstr = ""
 
-	def update(self, cv, ev):
-		# Begin
-		self.thisTime = cv[IDX_TIME]
+# 	def update(self, cv, ev):
+# 		# Begin
+# 		self.thisTime = cv[IDX_TIME]
 
-		# Edge on Serial line
-		if (ev[self.idx] == 1):
+# 		# Edge on Serial line
+# 		if (ev[self.idx] == 1):
 				
-			self.delta = self.thisTime - self.prevTime
-			self.bitsComb = int((self.delta + 0.000008) / 0.00001734)
+# 			self.delta = self.thisTime - self.prevTime
+# 			self.bitsComb = int((self.delta + 0.000008) / 0.00001734)
 
-			if (self.bitCounter == 0):
-				self.debugstr = " S"
+# 			if (self.bitCounter == 0):
+# 				self.debugstr = " S"
 
-			self.bitCounter += self.bitsComb
+# 			self.bitCounter += self.bitsComb
 
-			if (cv[self.idx] == 0) and (self.bitCounter >= 9):
-				self.debugstr = " E"
-				if (self.bitsComb > 1):
-					self.debugstr += "+"
+# 			if (cv[self.idx] == 0) and (self.bitCounter >= 9):
+# 				self.debugstr = " E"
+# 				if (self.bitsComb > 1):
+# 					self.debugstr += "+"
 
-			if (DEBUG_R1 and (self.idx == IDX_RX)) or (DEBUG_T1 and (self.idx == IDX_TX)):
-				print ("%2d " % (self.idx), end='')
+# 			if (DEBUG_R1 and (self.idx == IDX_RX)) or (DEBUG_T1 and (self.idx == IDX_TX)):
+# 				print ("%2d " % (self.idx), end='')
 
-			for z in range(self.bitsComb):
+# 			for z in range(self.bitsComb):
 
-				if (DEBUG_R1 and (self.idx == IDX_RX)) or (DEBUG_T1 and (self.idx == IDX_TX)):
-					print ("(%2d, %1d)" % (self.bidx, cv[self.idx] ^ 1), end='')
+# 				if (DEBUG_R1 and (self.idx == IDX_RX)) or (DEBUG_T1 and (self.idx == IDX_TX)):
+# 					print ("(%2d, %1d)" % (self.bidx, cv[self.idx] ^ 1), end='')
 
-				if (self.bidx >= 1) and (self.bidx <= 8):
-					self.byte += (cv[self.idx] ^ 1) * 2 ** (self.bidx - 1)
+# 				if (self.bidx >= 1) and (self.bidx <= 8):
+# 					self.byte += (cv[self.idx] ^ 1) * 2 ** (self.bidx - 1)
 
-				if self.bidx == 8:
+# 				if self.bidx == 8:
 
-					if (DEBUG_R1 and (self.idx == IDX_RX)) or (DEBUG_T1 and (self.idx == IDX_TX)):
-						print (" VALUE %2.2x" % (self.byte), end='')
+# 					if (DEBUG_R1 and (self.idx == IDX_RX)) or (DEBUG_T1 and (self.idx == IDX_TX)):
+# 						print (" VALUE %2.2x" % (self.byte), end='')
 
-					self.debugstr = " VALUE %2.2x" % (self.byte)
-					if self.prevTime > -1999.0:
-						self.Values.append([self.startTime, self.byte])
+# 					self.debugstr = " VALUE %2.2x" % (self.byte)
+# 					if self.prevTime > -1999.0:
+# 						self.Values.append([self.startTime, self.byte])
 
-				self.bidx += 1
-				if self.bidx > 8:
-					break
+# 				self.bidx += 1
+# 				if self.bidx > 8:
+# 					break
 
-			if (DEBUG_R1 and (self.idx == IDX_RX)) or (DEBUG_T1 and (self.idx == IDX_TX)):
-				print ("")
+# 			if (DEBUG_R1 and (self.idx == IDX_RX)) or (DEBUG_T1 and (self.idx == IDX_TX)):
+# 				print ("")
 
-			thisEntry = [self.thisTime, self.prevTime, self.delta, cv[self.idx], \
-						 self.bitCounter, self.bitsComb, self.debugstr]
+# 			thisEntry = [self.thisTime, self.prevTime, self.delta, cv[self.idx], \
+# 						 self.bitCounter, self.bitsComb, self.debugstr]
 
-			if self.prevTime > -1999.0:
-				self.Entries.append(thisEntry)
+# 			if self.prevTime > -1999.0:
+# 				self.Entries.append(thisEntry)
 
-			if (cv[self.idx] == 0) and (self.bitCounter >= 9):
-				self.bitCounter = 0
-				self.bidx = 0
-				self.byte = 0
-				self.startTime = self.thisTime
+# 			if (cv[self.idx] == 0) and (self.bitCounter >= 9):
+# 				self.bitCounter = 0
+# 				self.bidx = 0
+# 				self.byte = 0
+# 				self.startTime = self.thisTime
 
-			self.prevTime = self.thisTime
-			self.debugstr = ""
+# 			self.prevTime = self.thisTime
+# 			self.debugstr = ""
 
-	def get_entries(self):
-		return self.Entries
+# 	def get_entries(self):
+# 		return self.Entries
 
-	def get_values(self):
-		return self.Values
+# 	def get_values(self):
+# 		return self.Values
 
 #------------------------------------------------------------------------------------------------------------------------#
 
@@ -597,14 +601,11 @@ fileOut.write("Input file: %s of %s\n" % (infilename, ftstr))
 # Create fan parser
 fan = parse_fanPWM()
 
-
-numlines = 0
-
 fileOut.write("\n")
 fileOut.write("Module   Time        Edge Type\n")
 fileOut.write("-------  ----------  ---------\n")
-print("Module   Time        Edge Type")
-print("-------  ----------  ---------")
+
+numlines = 0
 
 # skip first row, it is a header
 line = fileIn.readline()
@@ -647,7 +648,45 @@ while 1:
 
 	prev_vect[:] = cur_vect[:]
 
+## Process the fan PWM edge entries
+fileOut.write("\n\n")
+fileOut.write("Module   Rising T0   Falling T   Rising T1   Duty Cycle\n")
+fileOut.write("-------  ----------  ----------  ----------  ----------\n")
+fan_edges = fan.get_entries()
+
+idx = 0
+
+while (fan_edges[idx][1] != 1):
+	idx += 1
+
+risingT = -2000.0
+prevRisingT = -2000.0
+fallingT = -2000.0
+
+for _, f in enumerate(fan_edges[idx:]):
+	# Rising Edge
+	if f[1] == 1:
+		prevRisingT = risingT
+		risingT = f[0]
+		periodT = risingT - prevRisingT
+		# Find the duty cycle
+		if fallingT < risingT and fallingT > prevRisingT:
+			highTimeT = fallingT - prevRisingT
+			dutyCycle = highTimeT / periodT
+			fileOut.write("FAN_PWM  %10f  %10f  %10f  %9.2f%% \n" % (prevRisingT, fallingT, risingT, (dutyCycle * 100)))
+	# Falling Edge
+	elif f[1] == 0:
+		fallingT = f[0]
+
+
 fileOut.write("\nDone\n")
 print("\nDone")
 fileOut.write("Num FAN_PWM edges: %d\n" % fan.countFanEdge)
 print("Num FAN_PWM edges: %d\n" % fan.countFanEdge)
+# print("%24.20f" % np.mean(fan.period[1:]))
+# print("%24.20f" % np.min(fan.period[1:]))
+# print("%24.20f" % np.max(fan.period[1:]))
+# print("%24.20f" % np.std(fan.period[1:]))
+
+# Find duty cycles based on the period from rising->rising edge and calculate out the percentage of the time that is high
+# based on the time between rising and falling edge and the total time between rising and rising edge
