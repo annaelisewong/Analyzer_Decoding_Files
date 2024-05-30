@@ -211,7 +211,7 @@ class parse_host:
 			# print ("Command: %10.6f <%2.2x> %s [%1d] %s {%10.6f, %10.6f}" % \
 			# 		(self.stxTime, p[2], cmdString, cmdLength, argString, self.updTime, self.updTime - self.updTimePrev))
 
-			self.CmdSummary.append("Cmd[%3.3d] % 11.6f % 11.6f %s %s %s\n" % \
+			self.CmdSummary.append("Cmd[%3.3d] % 11.6f % 11.6f %s %s %s" % \
 					(self.UpdateCount, self.stxTime, self.updTime - self.updTimePrev, self.ca, self.cd, self.cv)) 
 
 			self.updTimePrev = self.updTime
