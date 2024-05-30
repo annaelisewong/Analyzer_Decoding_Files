@@ -33,8 +33,6 @@ for infilename in file_list:
     if infilename == "":
         print("No file name detected.")
         continue #sys.exit(1)
-
-    print("MsgOut file: %s" % (infilename))
     
     try:
         fileIn = open(infilename, 'rt')
@@ -63,7 +61,6 @@ for infilename in file_list:
     line = [l.strip() for l in line.split()]
     # NOTE: 2 options for rounding the value: (1) using the floor of the float value, or (2) rounding the float value up or down respective to the dec value
     gcd = math.floor(int(line[7]) * 1.6)
-    print(infilename)
     datafilename = os.path.splitext(infilename)[0].replace("MsgOut", "Group0") + ".csv"
     datafilename = datafilename.replace("Reports", "Exports")
     fileOut.write(f"{datafilename}, {gcd}\n")
@@ -80,20 +77,19 @@ fileIn = open(infilename, 'rt')
 
 file_count = 1
 line = fileIn.readline()
-print(line)
 
 while line:
-    line = fileIn.readline()
     line = line.split()
     if len(line) > 0:
         datafile = line[0].strip(",")
         gcd = line[1]
         outfilename = os.path.splitext(datafile)[0].replace("Group0", "BeakTimingOut") + ".txt"
         outfilename = outfilename.replace("Exports", "Reports")
-        print("(%d/%d) Running: pho_beak_raw.py for %s" % (file_count, total_files, datafile))
+        print("  (%d/%d) Running: pho_beak_raw.py for %s" % (file_count, total_files, datafile))
         fileOut = open(outfilename, 'wt')
         p = subprocess.Popen(["python3", "C:\\Users\\awong\\Documents\\Analyzer_Decoding_Files\\pho_raw_beak.py", "-i", datafile, "-g", gcd], stdout=fileOut)
         p.wait()
         fileOut.close()
+        line = fileIn.readline()
     file_count += 1
         

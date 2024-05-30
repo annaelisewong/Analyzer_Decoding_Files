@@ -25,6 +25,7 @@ def parseMotCmdMsgOut(fileIn):
         print("Issue with ")
     while "Summary" not in line and line:
         line = fileIn.readline()
+        print(line)
 
     for i in range(4):
         line = fileIn.readline()
@@ -451,6 +452,8 @@ for o, a in opts:
 if rotor_name == "":
     usage()
 
+rotor_name = rotor_name.replace("Exports", "Reports")
+
 ris_infilename = rotor_name + "_RIS_Readable.txt"
 mot_infilename = rotor_name + "_MotCmdMsgOut.txt"
 msg_infilename = rotor_name + "_MsgOut.txt"
@@ -465,7 +468,7 @@ if "Lipid" in ris_infilename:
     print("Skipping: %s" % (ris_infilename))
     sys.exit(1)
 
-print("Extracting phase timestamps for %s" % rotor_name)
+print("  Extracting phase timestamps for %s" % rotor_name)
 
 if ris_infilename != "":
 
@@ -492,7 +495,7 @@ if mot_infilename != "":
     fileIn.close()
 
     if len(motRPM) < 5:
-        print("%s did not contain any values. Exiting now." % mot_infilename)
+        print("  %s did not contain any values. Exiting now." % mot_infilename)
         sys.exit(1)
 
 

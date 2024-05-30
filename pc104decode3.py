@@ -689,6 +689,8 @@ for o, a in opts:
 if rotor_name == "":
 	usage()
 
+rotor_name = rotor_name.replace("Exports", "Reports")
+
 rotor_filepath = os.path.split(rotor_name)[0]
 rotor_basename = os.path.split(rotor_name)[1]
 

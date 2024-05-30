@@ -409,6 +409,8 @@ for o, a in opts:
 if rotor_name == "":
     usage()
 
+rotor_name = rotor_name.replace("Exports", "Reports")
+
 g1_infilename = rotor_name + "_Group1Data.txt"
 p_infilename = rotor_name + "_PhaseTimestampsOut.txt"
 m_infilename = rotor_name + "_MsgOut.txt"

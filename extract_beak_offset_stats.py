@@ -37,6 +37,8 @@ for o, a in opts:
 if rotor_name == "":
     usage()
 
+rotor_name = rotor_name.replace("Exports", "Reports")
+
 infilename = rotor_name + "_BeakTimingOut.txt"
 
 print("Beak Error Stats\n")
@@ -117,7 +119,7 @@ print("Avg  %10.3f %8.3f" % (beakError_avg, beakErrorPercent_avg))
 print("Std  %10.3f %8.3f" % (beakError_std, beakErrorPercent_std))
 
 if CREATE_OUTPUT_FILE:
-    outfilename = rotor_name + "_BeakOffsetStatsOut.txt"
+    outfilename = rotor_name.replace("Exports", "Reports") + "_BeakOffsetStatsOut.txt"
     fileOut = open(outfilename, 'wt')
 
     fileOut.write("Beak Error Stats\n\n")

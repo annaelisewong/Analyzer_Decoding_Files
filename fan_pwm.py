@@ -650,8 +650,8 @@ while 1:
 
 ## Process the fan PWM edge entries
 fileOut.write("\n\n")
-fileOut.write("Module   Rising T0   Falling T   Rising T1   Duty Cycle\n")
-fileOut.write("-------  ----------  ----------  ----------  ----------\n")
+fileOut.write("Module   Rising T0   Falling T   Rising T1   Period      Duty Cycle\n")
+fileOut.write("-------  ----------  ----------  ----------  ----------  ----------\n")
 fan_edges = fan.get_entries()
 
 idx = 0
@@ -673,7 +673,7 @@ for _, f in enumerate(fan_edges[idx:]):
 		if fallingT < risingT and fallingT > prevRisingT:
 			highTimeT = fallingT - prevRisingT
 			dutyCycle = highTimeT / periodT
-			fileOut.write("FAN_PWM  %10f  %10f  %10f  %9.2f%% \n" % (prevRisingT, fallingT, risingT, (dutyCycle * 100)))
+			fileOut.write("FAN_PWM  %10f  %10f  %10f %10f %9.2f%% \n" % (prevRisingT, fallingT, risingT, (risingT - prevRisingT),(dutyCycle * 100)))
 	# Falling Edge
 	elif f[1] == 0:
 		fallingT = f[0]

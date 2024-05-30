@@ -38,6 +38,8 @@ for o, a in opts:
 if rotor_name == "":
     usage()
 
+rotor_name = rotor_name.replace("Exports", "Reports")
+
 infilename = rotor_name + "_BeakTimingOut.txt"
 
 all_holdTime = []
@@ -103,7 +105,7 @@ print("Avg  %9.3f" % (avg))
 print("Std  %9.3f" % (std))
 
 if CREATE_OUTPUT_FILE:
-    outfilename = rotor_name + "_HoldTimeStatsOut.txt"
+    outfilename = rotor_name.replace("Exports", "Reports") + "_HoldTimeStatsOut.txt"
     fileOut = open(outfilename, 'wt')
 
     fileOut.write("Hold Time Stats\n\n")

@@ -31,6 +31,8 @@ for o, a in opts:
 if rotor_name == "":
     usage()
 
+rotor_name = rotor_name.replace("Exports", "Reports")
+
 infilename = rotor_name + "_BeakTimingOut.txt"
 
 if infilename == "":
@@ -51,7 +53,7 @@ while "Timing Stats" not in line:
     line = fileIn.readline()
 
 if CREATE_OUTPUT_FILE:
-    outfilename = rotor_name + "_BeakTimingStatsOut.txt"
+    outfilename = rotor_name.replace("Exports", "Reports") + "_BeakTimingStatsOut.txt"
     fileOut = open(outfilename, 'wt')
     fileOut.write("File Name: %s\n\n" % infilename)
 

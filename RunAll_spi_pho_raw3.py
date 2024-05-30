@@ -36,6 +36,8 @@ for infilename in file_list:
     # fileOut = open(outfilename, 'wt')
     p = subprocess.Popen(["python3", "C:\\Users\\awong\\Documents\\Analyzer_Decoding_Files\\spi_pho_raw3.py", "-r", rotor_name, "-a", "Serial"])
     p.wait()
-    # fileOut.close()
-    # fileIn.close()
+    # result = subprocess.run(["python3", "C:\\Users\\awong\\Documents\\Analyzer_Decoding_Files\\spi_pho_raw3.py", "-r", rotor_name, "-a", "Serial"], capture_output=False, text=True)
+    # if result != 0:
+    #     print("Could not decode this file")
+
     file_count += 1

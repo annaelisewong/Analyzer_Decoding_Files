@@ -327,6 +327,7 @@ numlines = 0
 
 # skip first row, it is a header
 line = fileIn.readline()
+
 numlines += 1
 
 cur_vect = [-99.0, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]

@@ -30,6 +30,10 @@ for infilename in file_list:
     #     os.remove(outfilename)
 
     # fileOut = open(outfilename, 'wt')
-    p = subprocess.Popen(["python3", "C:\\Users\\awong\\Documents\\Analyzer_Decoding_Files\\Ris_File_Dump.py", "-r", rotor_name])
-    p.wait()
+    # p = subprocess.Popen(["python3", "C:\\Users\\awong\\Documents\\Analyzer_Decoding_Files\\Ris_File_Dump.py", "-r", rotor_name])
+    result = subprocess.run(["python3", "C:\\Users\\awong\\Documents\\Analyzer_Decoding_Files\\Ris_File_Dump.py", "-r", rotor_name], capture_output=False, text=True)
+
+    # print(result.stdout)
+    # print(result.returncode)
+    # p.wait()
     # fileOut.close()

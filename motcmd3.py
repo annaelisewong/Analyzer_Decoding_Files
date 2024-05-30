@@ -287,6 +287,8 @@ for o, a in opts:
     if o == "-r":
         rotor_name = a
 
+rotor_name = rotor_name.replace("Exports", "Reports")
+
 rxfilename = rotor_name + "_Group1_motrx.txt"
 txfilename = rotor_name + "_Group1_mottx.txt"
 

@@ -170,10 +170,11 @@ for o, a in opts:
 
 if rotor_name == '':
     usage()
-    sys.exit(1)
+
+rotor_name = rotor_name.replace("Exports", "Reports")
 
 inFileName = rotor_name + "_RIS.bin"
-outFileName = rotor_name + "_RIS_Readable.txt"
+outFileName = rotor_name.replace("Exports", "Reports") + "_RIS_Readable.txt"
 
 base = os.path.basename(inFileName)
 basefile = os.path.splitext(base)[0]
