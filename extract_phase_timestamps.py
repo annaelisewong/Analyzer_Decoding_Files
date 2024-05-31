@@ -25,7 +25,6 @@ def parseMotCmdMsgOut(fileIn):
         print("Issue with ")
     while "Summary" not in line and line:
         line = fileIn.readline()
-        print(line)
 
     for i in range(4):
         line = fileIn.readline()

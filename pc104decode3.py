@@ -694,8 +694,11 @@ rotor_name = rotor_name.replace("Exports", "Reports")
 rotor_filepath = os.path.split(rotor_name)[0]
 rotor_basename = os.path.split(rotor_name)[1]
 
-rxfilename = rotor_filepath + "\Serial" + rotor_basename + "_Group0_rx.txt"
-txfilename = rotor_filepath + "\Serial" + rotor_basename + "_Group0_tx.txt"
+if rotor_filepath != "":
+	rotor_filepath += "\\"
+
+rxfilename = rotor_filepath + "Serial" + rotor_basename + "_Group0_rx.txt" #TODO fix this bug 
+txfilename = rotor_filepath + "Serial" + rotor_basename + "_Group0_tx.txt"
 risfilename = rotor_name + "_RIS.bin"
 barfilename = ""
 
