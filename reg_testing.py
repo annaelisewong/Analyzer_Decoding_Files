@@ -8,12 +8,12 @@ import subprocess
 # Create a variable to make it easier for other people to use the script
 script_path = "C:\\Users\\awong\\Documents\\Analyzer_Decoding_Files\\"
 
-# Create the Exports and Reports folders
-if not os.path.exists(".\\Exports\\"):
-    os.makedirs(".\\Exports\\")
+# # Create the Exports and Reports folders
+# if not os.path.exists(".\\Exports\\"):
+#     os.makedirs(".\\Exports\\")
 
-if not os.path.exists(".\\Reports\\"):
-    os.makedirs(".\\Reports\\")
+# if not os.path.exists(".\\Reports\\"):
+#     os.makedirs(".\\Reports\\")
 
 # Export data from .sal files
 print("\n* export_digital_csv.py\n")
