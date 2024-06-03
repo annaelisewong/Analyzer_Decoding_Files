@@ -1,0 +1,4 @@
+﻿Tolerance Name,Min,Max,ExpVal
+BeakTiming,0,0,0
+IntegrationTiming,99,101,100
+HoldTiming,685,715,700
