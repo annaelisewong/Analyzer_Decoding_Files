@@ -3,7 +3,6 @@
 
 import os
 import csv
-import sys
 import subprocess
 
 # Create the Exports and Reports folders
@@ -22,13 +21,12 @@ p.wait()
 file_list = [os.path.join(dirpath, filename) for dirpath, _, filenames in os.walk('.') for filename in filenames if "Group0.csv" in filename]
 rotor_names = []
 for file in file_list:
-    # NOTE: don't know if I need to change Exports to Reports here, or if it is fine in spi_pho/u18_raw3.py for now, since spi_pho/u18_raw3 needs the .csv file
     rotor_names.append(file.replace("_Group0.csv", ""))
 
 # Start a reports tracking file
 status_tracker = open(".\\Reports\\status_tracker.csv", "wt")
 statuswriter = csv.writer(status_tracker, delimiter = ',')
-titles = ['Script'] + [os.path.basename(rotor_name) for rotor_name in rotor_names]
+titles = ['Script Names'] + [os.path.basename(rotor_name) for rotor_name in rotor_names]
 statuswriter.writerow(titles)
 
 # spi_pho_raw3.py
@@ -43,8 +41,6 @@ for rotor_name in rotor_names:
         status.append("no")
     else:
         status.append("yes")
-    # p = subprocess.Popen(["python3", "C:\\Users\\awong\\Documents\\Analyzer_Decoding_Files\\spi_pho_raw3.py", "-r", rotor_name, "-a", "Serial"])
-    # p.wait()
 statuswriter.writerow(status)
 
 # pc104decode3.py
@@ -54,8 +50,6 @@ status = ["pc104decode3.py"]
 for rotor_name in rotor_names:
     file_count += 1
     print("  (%d/%d) Input file prefix: %s" % (file_count, len(rotor_names), rotor_name))
-    # p = subprocess.Popen(["python3", "C:\\Users\\awong\\Documents\\Analyzer_Decoding_Files\\pc104decode3.py", "-r", rotor_name])
-    # p.wait()
     result = subprocess.run(["python3", "C:\\Users\\awong\\Documents\\Analyzer_Decoding_Files\\pc104decode3.py", "-r", rotor_name], capture_output=False, text=True)
     if result.returncode != 0:
         status.append("no")
@@ -70,8 +64,6 @@ status = ["Ris_File_Dump.py"]
 for rotor_name in rotor_names:
     file_count += 1
     print("  (%d/%d) Input file prefix: %s" % (file_count, len(rotor_names), rotor_name))
-#     p = subprocess.Popen(["python3", "C:\\Users\\awong\\Documents\\Analyzer_Decoding_Files\\Ris_File_Dump.py", "-r", rotor_name])
-#     p.wait()
     result = subprocess.run(["python3", "C:\\Users\\awong\\Documents\\Analyzer_Decoding_Files\\pc104decode3.py", "-r", rotor_name], capture_output=False, text=True)
     if result.returncode != 0:
         status.append("no")
@@ -86,8 +78,6 @@ status = ["spi_u18_raw3.py"]
 for rotor_name in rotor_names:
     file_count += 1
     print("  (%d/%d) Input file prefix: %s" % (file_count, len(rotor_names), rotor_name))
-    # p = subprocess.Popen(["python3", "C:\\Users\\awong\\Documents\\Analyzer_Decoding_Files\\spi_u18_raw3.py", "-r", rotor_name, "-a"])
-    # p.wait()
     result = subprocess.run(["python3", "C:\\Users\\awong\\Documents\\Analyzer_Decoding_Files\\spi_u18_raw3.py", "-r", rotor_name, "-a"], capture_output=False, text=True)
     if result.returncode != 0:
         status.append("no")
@@ -102,8 +92,6 @@ status = ["motcmd3.py"]
 for rotor_name in rotor_names:
     file_count += 1
     print("  (%d/%d) Input file prefix: %s" % (file_count, len(rotor_names), rotor_name))
-#     p = subprocess.Popen(["python3", "C:\\Users\\awong\\Documents\\Analyzer_Decoding_Files\\motcmd3.py", "-r", rotor_name])
-#     p.wait()
     result = subprocess.run(["python3", "C:\\Users\\awong\\Documents\\Analyzer_Decoding_Files\\motcmd3.py", "-r", rotor_name], capture_output=False, text=True)
     if result.returncode != 0:
         status.append("no")
@@ -115,11 +103,6 @@ statuswriter.writerow(status)
 print("\n* pho_raw_beak.py\n")
 file_count = 0
 status = ["pho_raw_beak.py"]
-# for rotor_name in rotor_names:
-    # file_count += 1
-    # print("  (%d/%d) Input file prefix: %s" % (file_count, len(rotor_names), rotor_name))
-# p = subprocess.Popen(["python3", "C:\\Users\\awong\\Documents\\Analyzer_Decoding_Files\\RunAll_pho_raw_beak.py"])
-# p.wait()
 result = subprocess.run(["python3", "C:\\Users\\awong\\Documents\\Analyzer_Decoding_Files\\RunAll_pho_raw_beak.py"], capture_output=False, text=True)
 if result.returncode != 0:
     status.append("no")
@@ -134,9 +117,7 @@ status = ["extract_beak_timing_stats.py"]
 for rotor_name in rotor_names:
     file_count += 1
     print("  (%d/%d) Input file prefix: %s" % (file_count, len(rotor_names), rotor_name))
-    # p = subprocess.Popen(["python3", "C:\\Users\\awong\\Documents\\Analyzer_Decoding_Files\\extract_beak_timing_stats.py", "-r", rotor_name])
-    # p.wait()
-    result = subprocess.run(["python3", "C:\\Users\\awong\\Documents\\Analyzer_Decoding_Files\\extract_beak_timing_stats.py", "-r", rotor_name], capture_output=False, text=True)
+    result = subprocess.run(["python3", "C:\\Users\\awong\\Documents\\Analyzer_Decoding_Files\\extract_beak_timing_stats.py", "-r", rotor_name, "-o"], capture_output=False, text=True)
     if result.returncode != 0:
         status.append("no")
     else:
@@ -150,9 +131,7 @@ status = ["extract_beak_offset_stats.py"]
 for rotor_name in rotor_names:
     file_count += 1
     print("  (%d/%d) Input file prefix: %s" % (file_count, len(rotor_names), rotor_name))
-    # p = subprocess.Popen(["python3", "C:\\Users\\awong\\Documents\\Analyzer_Decoding_Files\\extract_beak_offset_stats.py", "-r", rotor_name])
-    # p.wait()
-    result = subprocess.run(["python3", "C:\\Users\\awong\\Documents\\Analyzer_Decoding_Files\\extract_beak_offset_stats.py", "-r", rotor_name], capture_output=False, text=True)
+    result = subprocess.run(["python3", "C:\\Users\\awong\\Documents\\Analyzer_Decoding_Files\\extract_beak_offset_stats.py", "-r", rotor_name, "-o"], capture_output=False, text=True)
     if result.returncode != 0:
         status.append("no")
     else:
@@ -166,9 +145,7 @@ status = ["extract_hold_time_stats.py"]
 for rotor_name in rotor_names:
     file_count += 1
     print("  (%d/%d) Input file prefix: %s" % (file_count, len(rotor_names), rotor_name))
-#     p = subprocess.Popen(["python3", "C:\\Users\\awong\\Documents\\Analyzer_Decoding_Files\\extract_hold_time_stats.py", "-r", rotor_name])
-#     p.wait()
-    result = subprocess.run(["python3", "C:\\Users\\awong\\Documents\\Analyzer_Decoding_Files\\extract_hold_time_stats.py", "-r", rotor_name], capture_output=False, text=True)
+    result = subprocess.run(["python3", "C:\\Users\\awong\\Documents\\Analyzer_Decoding_Files\\extract_hold_time_stats.py", "-r", rotor_name, "-o"], capture_output=False, text=True)
     if result.returncode != 0:
         status.append("no")
     else:
@@ -187,8 +164,6 @@ for rotor_name in rotor_names:
         status.append("no")
     else:
         status.append("yes")
-    # p = subprocess.Popen(["python3", "C:\\Users\\awong\\Documents\\Analyzer_Decoding_Files\\extract_phase_timestamps.py", "-r", rotor_name])
-    # p.wait()
 print(status)
 statuswriter.writerow(status)
 
@@ -199,8 +174,6 @@ status = ["extract_temps.py"]
 for rotor_name in rotor_names:
     file_count += 1
     print("  (%d/%d) Input file prefix: %s" % (file_count, len(rotor_names), rotor_name))
-#     p = subprocess.Popen(["python3", "C:\\Users\\awong\\Documents\\Analyzer_Decoding_Files\\extract_temps.py", "-r", rotor_name, "-o", "-s", "-t"])
-    # p.wait()
     result = subprocess.run(["python3", "C:\\Users\\awong\\Documents\\Analyzer_Decoding_Files\\extract_temps.py", "-r", rotor_name, "-o", "-s", "-t"], capture_output=False, text=True)
     if result.returncode != 0:
         status.append("no")
@@ -208,4 +181,5 @@ for rotor_name in rotor_names:
         status.append("yes")
 statuswriter.writerow(status)
 status_tracker.close()
-sys.exit(0)
+
+
