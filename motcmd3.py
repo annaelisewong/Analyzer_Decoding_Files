@@ -292,7 +292,7 @@ rotor_name = rotor_name.replace("Exports", "Reports")
 rxfilename = rotor_name + "_Group1_motrx.txt"
 txfilename = rotor_name + "_Group1_mottx.txt"
 
-outfilename = txfilename.replace("Group1_mottx", "MotCmdMsgOut")
+outfilename = rotor_name + "_MotCmdMsgOut.txt"
 if os.path.exists(outfilename):
 	os.remove(outfilename)
 fileOut = open(outfilename, 'wt')
