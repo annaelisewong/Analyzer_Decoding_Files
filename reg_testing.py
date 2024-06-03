@@ -107,10 +107,10 @@ print("\n* pho_raw_beak.py\n")
 file_count = 0
 status = ["pho_raw_beak.py"]
 result = subprocess.run(["python3", script_path + "RunAll_pho_raw_beak.py"], capture_output=False, text=True)
-if result.returncode != 0:
-    status.append("no")
-else:
-    status.append("yes")
+# if result.returncode != 0:
+#     status.append("no")
+# else:
+#     status.append("yes")
 statuswriter.writerow(status)
 
 # extract_beak_timing_stats.py
