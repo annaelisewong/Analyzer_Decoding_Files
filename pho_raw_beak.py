@@ -131,9 +131,13 @@ class parse_cuv:
 		if ev[IDX_BEAK] == 1 and cv[IDX_BEAK] == 1:
 			self.T7BeakRE = cv[IDX_TIME]
 
+			## AEW edit: add in reset time edges
+			# self.BeakTiming2.append([self.pulseCount, self.T1RefRE, self.T2RefFE, \
+			#                          self.T3SamRE, self.T4BeakFE, self.T5HoldRE, self.T6SamFE, \
+			#                          self.T7BeakRE])
 			self.BeakTiming2.append([self.pulseCount, self.T1RefRE, self.T2RefFE, \
 			                         self.T3SamRE, self.T4BeakFE, self.T5HoldRE, self.T6SamFE, \
-			                         self.T7BeakRE])
+			                         self.T7BeakRE, self.rstRE, self.rstFE])
 
 		#
 		# Rising edge of INT_RST#
@@ -392,11 +396,11 @@ fileOut.write("Beak Timing (microseconds)\n")
 if gcd > 0.1:
 	fileOut.write("Global Cuvette Delay = %.0f\n" % (gcd))
 	fileOut.write("           [Measured]                                  [Derived]                                     \n")
-	fileOut.write("     Cuv   Ref Width  RefToBeak     Integ      Cycle   BeakDelay     BeakErr    %       IntErr    %  \n")
-	fileOut.write("     ---   ---------  ---------  --------  ---------   ---------   ---------  -----  ---------  -----\n")
+	fileOut.write("     Cuv   Ref Width  RefToBeak     Integ      Cycle   BeakDelay     BeakErr    %       IntErr    %    ResetDelay\n")
+	fileOut.write("     ---   ---------  ---------  --------  ---------   ---------   ---------  -----  ---------  -----  ----------\n")
 else:
-	fileOut.write("     Cuv   Ref Width  RefToBeak        Int      Cycle  BeakDelay\n")
-	fileOut.write("     ---   ---------  ---------  ---------  ---------  ---------\n")
+	fileOut.write("     Cuv   Ref Width  RefToBeak        Int      Cycle  BeakDelay  ResetDelay\n")
+	fileOut.write("     ---   ---------  ---------  ---------  ---------  ---------  ----------\n")
 
 bt = cuv.get_BeakTiming2()
 lenBt2 = len(bt)
@@ -405,6 +409,8 @@ list_delayRefToBeak = []
 list_delayBeakToHold = []
 list_delayBeakWidth = []
 list_BeakTime = []
+# AEW edit
+list_rstTime = []
 
 for i in range (lenBt2):
 	delay_RefWidth = 1000000 * (bt[i][2] - bt[i][1])
@@ -421,19 +427,31 @@ for i in range (lenBt2):
 	list_BeakTime.append(delay_BeakTime)
 	list_delayBeakToHold.append(delay_delayBeakToHold)
 
+	# AEW edit
+	delay_rstTime = 1000000 * (bt[i][7] - bt[i][8])
+	list_rstTime.append(delay_rstTime)
+
 	if gcd > 0.1:
 		err_Beak = delay_BeakTime - gcd
 		err_BeakPct = 100 * err_Beak / gcd
 		err_Int = delay_delayBeakToHold - 100
 		err_IntPct = 100 * err_Int / 100
 
-		fileOut.write ("%4d %3d  % 10.3f % 10.3f % 9.3f %10.3f  %10.3f  %10.6f %6.2f %10.6f %6.2f\n" % \
+		# AEW edit
+		# fileOut.write ("%4d %3d  % 10.3f % 10.3f % 9.3f %10.3f  %10.3f  %10.6f %6.2f %10.6f %6.2f\n" % \
+		# 			(i+1, bt[i][0], delay_RefWidth, delay_delayRefToBeak, delay_delayBeakToHold, \
+		# 			delay_delayBeakWidth, delay_BeakTime, err_Beak, err_BeakPct, err_Int, err_IntPct))
+		fileOut.write ("%4d %3d  % 10.3f % 10.3f % 9.3f %10.3f  %10.3f  %10.6f %6.2f %10.6f %6.2f %10.3f\n" % \
 					(i+1, bt[i][0], delay_RefWidth, delay_delayRefToBeak, delay_delayBeakToHold, \
-					delay_delayBeakWidth, delay_BeakTime, err_Beak, err_BeakPct, err_Int, err_IntPct))
+					delay_delayBeakWidth, delay_BeakTime, err_Beak, err_BeakPct, err_Int, err_IntPct, delay_rstTime))
 	else:
-		fileOut.write ("%4d %3d  % 10.3f % 10.3f % 9.3f %10.3f  %10.3f\n" % \
+		# AEW edit
+		# fileOut.write ("%4d %3d  % 10.3f % 10.3f % 9.3f %10.3f  %10.3f\n" % \
+		# 			(i+1, bt[i][0], delay_RefWidth, delay_delayRefToBeak, delay_delayBeakToHold, \
+		# 			delay_delayBeakWidth, delay_BeakTime))
+		fileOut.write ("%4d %3d  % 10.3f % 10.3f % 9.3f %10.3f  %10.3f  %10.3f\n" % \
 					(i+1, bt[i][0], delay_RefWidth, delay_delayRefToBeak, delay_delayBeakToHold, \
-					delay_delayBeakWidth, delay_BeakTime))
+					delay_delayBeakWidth, delay_BeakTime, delay_rstTime))
 
 arr_BeakTime = np.asarray(list_BeakTime)
 arr_BeakToHold = np.asarray(list_delayBeakToHold)		

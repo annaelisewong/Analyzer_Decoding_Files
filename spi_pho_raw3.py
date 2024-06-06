@@ -687,8 +687,7 @@ line = fileIn.readline()
 numlines += 1
 
 # Note: -600.0 value is arbitrary. If the serial data is being cut off at -599, 
-# this is the reason. If data needed is further in the past than -600s, change
-# value accordingly.
+# this is the reason. If data needed is beyond -600s, change value accordingly.
 cur_vect = [-600.0, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]
 prev_vect = [-600.0, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]
 edge_vect = [-600.0, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]

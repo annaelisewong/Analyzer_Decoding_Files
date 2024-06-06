@@ -17,7 +17,7 @@ script_path = "C:\\Users\\awong\\Documents\\Analyzer_Decoding_Files\\"
 
 # Export data from .sal files
 print("\n* export_digital_csv.py\n")
-p = subprocess.Popen(["python3", "C:\\Users\\awong\\Documents\\Analyzer_Decoding_Files\\export_digital_csv.py"])
+p = subprocess.Popen(["python3", script_path + "export_digital_csv.py"])
 p.wait()
 
 # Get the files and rotor_name list
@@ -27,7 +27,7 @@ for file in file_list:
     rotor_names.append(file.replace("_Group0.csv", ""))
 
 # Start a reports tracking file
-status_tracker = open(".\\Reports\\status_tracker.csv", "wt")
+status_tracker = open("status_tracker.csv", "wt")
 statuswriter = csv.writer(status_tracker, delimiter = ',')
 titles = ['Script Names'] + [os.path.basename(rotor_name) for rotor_name in rotor_names]
 statuswriter.writerow(titles)
@@ -37,6 +37,10 @@ print("\n\n* spi_pho_raw3.py\n")
 file_count = 0
 status = ["spi_pho_raw3.py"]
 for rotor_name in rotor_names:
+    # Make sure Results folder exists
+    if not os.path.exists(os.path.dirname(rotor_name).replace("Exports", "Reports")):
+        os.makedirs(os.path.dirname(rotor_name).replace("Exports", "Reports"))
+
     file_count += 1
     print("  (%d/%d) Input file prefix: %s" % (file_count, len(rotor_names), rotor_name))
     result = subprocess.run(["python3", script_path + "spi_pho_raw3.py", "-r", rotor_name, "-a", "Serial"], capture_output=False, text=True)
