@@ -54,8 +54,8 @@ for file in file_list:
     print("Exporting data ...")
 
     # Export raw digital data to the CSV file
-    # capture.export_raw_data_csv(directory=outfilepath, digital_channels=[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15])
-    capture.export_raw_data_csv(directory=outfilepath, digital_channels=[4,5,6,7,8,9,10,11,12,13,14,15], analog_channels = [0,1,2,3])
+    capture.export_raw_data_csv(directory=outfilepath, digital_channels=[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15])
+    # capture.export_raw_data_csv(directory=outfilepath, digital_channels=[4,5,6,7,8,9,10,11,12,13,14,15], analog_channels = [0,1,2,3])
 
     print("Done")
     manager.close()
