@@ -397,7 +397,10 @@ if gcd > 0.1:
 	fileOut.write("Global Cuvette Delay = %.0f\n" % (gcd))
 	fileOut.write("           [Measured]                                  [Derived]                                     \n")
 	fileOut.write("     Cuv   Ref Width  RefToBeak     Integ      Cycle   BeakDelay     BeakErr    %       IntErr    %    ResetDelay\n")
-	fileOut.write("     ---   ---------  ---------  --------  ---------   ---------   ---------  -----  ---------  -----  ----------\n")
+	fileOut.write("     ---   ---------  ---------  --------  ---------   ---------   ---------  -----  ---------  -----  ----------1.	export_digital_csv.py: Exports .sal logic analyzer capture files to .csv files for processing
+2.	spi_pho_raw3.py: Extracts photonic data and asynchronous serial data from exported .csv files
+3.	pc104decode3.py: Converts asynchronous serial data to readable text file of serial communications between the SBC and the Engine Controller Board.
+\n")
 else:
 	fileOut.write("     Cuv   Ref Width  RefToBeak        Int      Cycle  BeakDelay  ResetDelay\n")
 	fileOut.write("     ---   ---------  ---------  ---------  ---------  ---------  ----------\n")

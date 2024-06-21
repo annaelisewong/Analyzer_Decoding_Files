@@ -1,9 +1,3 @@
-# MsgOut - 16 bit value
-# EngConsole - raw values ?
-# Group0Data - raw value?
-
-# Only care about channels 0,3,7
-
 import os
 import sys
 import getopt
