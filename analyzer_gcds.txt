@@ -1,0 +1,13 @@
+SN      GCD
+P21062  1329
+P23329  1332    ##Note: For some reason, one of the lipid analyses reported a GCD of 1342.
+P26145  1302
+P30221  1345
+P30636
+P31712  1377
+OFS1    1321
+OFS2    1321
+OFS3    1305
+OFS4    1345
+OFS5    1260
+PV2     1310
