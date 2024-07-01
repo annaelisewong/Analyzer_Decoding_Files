@@ -1,4 +1,5 @@
 import sys
+import os
 import getopt
 
 def usage():
@@ -53,7 +54,16 @@ while "Timing Stats" not in line:
     line = fileIn.readline()
 
 if CREATE_OUTPUT_FILE:
-    outfilename = rotor_name.replace("Exports", "Reports") + "_BeakTimingStatsOut.txt"
+    base = os.path.basename(rotor_name)
+    basefile = os.path.splitext(base)[0]
+    prefix = rotor_name.replace(base, "")
+    prefix = prefix.replace("Exports", "Reports")
+    abspath = os.path.abspath(prefix)
+    outpath = abspath.replace("Exports", "Reports")
+    if not os.path.exists(outpath):
+        os.mkdir(outpath)
+
+    outfilename = outpath + "\\" + basefile + "_BeakTimingStatsOut.txt"
     fileOut = open(outfilename, 'wt')
     fileOut.write("File Name: %s\n\n" % infilename)
 

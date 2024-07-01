@@ -94,7 +94,7 @@ def parseBeakTimingOutData(infilename):
 #--------------------------------------------------------------------------------------------#
 
 def usage():
-    print("extract_beak_offset_stats.py -i <rotor name> [-o]")
+    print("count_pho_readings_per_beak.py -i <rotor name> [-o]")
     print(" -i <test name> Full prefix name of rotor")
     print(" -o Flag to indicate output file should be created")
     sys.exit(0)
@@ -151,29 +151,29 @@ for a in ADC_read_data:
 for _ in range(i):
     del ADC_read_data[0]
 
-print("Beak Time  # ADC  Hold T  ADC dT  Status")
-print("---------  -----  ------  ------  ------")
-for adc, hold in zip(ADC_read_data, hold_time_data):
-    if adc[0] != hold[0]:
-        print("Beak Timestamps do not align.")
-        print(adc[0], hold[0])
-        break
+# print("Beak Time  # ADC  Hold T  ADC dT  Status")
+# print("---------  -----  ------  ------  ------")
+# for adc, hold in zip(ADC_read_data, hold_time_data):
+#     if adc[0] != hold[0]:
+#         print("Beak Timestamps do not align.")
+#         print(adc[0], hold[0])
+#         break
 
-    if adc[1] == -55:
-        continue
+#     if adc[1] == -55:
+#         continue
 
-    status = "OK"
+#     status = "OK"
 
-    # Compare ADC time delta with hold time
-    if hold[1] <= adc[1]:
-        print("ADC readings not contained within hold time bounds.")
-        status = "FAIL"
+#     # Compare ADC time delta with hold time
+#     if hold[1] <= adc[1]:
+#         print("ADC readings not contained within hold time bounds.")
+#         status = "FAIL"
     
-    if adc[2] != 10:
-        print("Didn't have 10 ADC readings")
-        status = "FAIL"
+#     if adc[2] != 10:
+#         print("Didn't have 10 ADC readings")
+#         status = "FAIL"
     
-    print("%9.4f   %2d    %6.2f  %6.2f   %3s" % (adc[0], adc[2], hold[1], adc[1], status))
+#     print("%9.4f   %2d    %6.2f  %6.2f   %3s" % (adc[0], adc[2], hold[1], adc[1], status))
 
 if CREATE_OUTPUT_FILE:
     fileOut = open(test_path + "_PhoPerBeakOut.txt", 'wt')

@@ -1,5 +1,6 @@
 import sys
 import getopt
+import os
 
 #-----------------------------------------------------------------------------------------------------------------------------------------#
 
@@ -218,10 +219,13 @@ def findPhases(msgOutT, motT, motRPM, risAccl):
     idx = 1 # Start at 1 so we can look at the i-1 timestamp without getting an error
     SCALING_FACTOR = 1.0
     shift = 0
-    while motRPM[shift-1] != 100:
+    first100idx = motRPM.index(100)
+    firstN5500idx = motRPM.index(-5500)
+    if first100idx < firstN5500idx:
+        while motRPM[shift-1] != 100:
+            shift += 1
         shift += 1
-    shift += 1
-
+    
     # Barcode scan, barcode data, begin analysis message timestamps
     phaseT += msgOutT
 
@@ -234,7 +238,6 @@ def findPhases(msgOutT, motT, motRPM, risAccl):
             idx+=1
 
     # End of transition phase
-    
     while idx < len(motRPM):
         if motRPM[idx] == 0 and motRPM[idx-1] == -5500:
             dv = motRPM[idx]-motRPM[idx-1]
@@ -511,7 +514,16 @@ if msg_infilename != "":
     fileIn.close()
 
 # Find phase timestamps for plotting
-outfilename = rotor_name + "_PhaseTimestampsOut.txt"
+base = os.path.basename(rotor_name)
+basefile = os.path.splitext(base)[0]
+prefix = rotor_name.replace(base, "")
+prefix = prefix.replace("Exports", "Reports")
+abspath = os.path.abspath(prefix)
+outpath = abspath.replace("Exports", "Reports")
+if not os.path.exists(outpath):
+    os.mkdir(outpath)
+
+outfilename = outpath + "\\" + basefile +"_PhaseTimestampsOut.txt"
 fileOut = open(outfilename, 'wt')
 print("Output file: %s" % outfilename)
 fileOut.write("%s High Level Phase Timestamps\n" % rotor_name)

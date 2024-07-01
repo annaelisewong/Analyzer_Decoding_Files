@@ -1,6 +1,7 @@
 import sys
 import numpy as np
 import getopt
+import os
 
 # This debug variable allows the initialization beak signal glitch that occurs to be 
 # "filtered" out to avoid the skewing of data. The "filter" simply ignores any
@@ -119,7 +120,17 @@ print("Avg  %10.3f %8.3f" % (beakError_avg, beakErrorPercent_avg))
 print("Std  %10.3f %8.3f" % (beakError_std, beakErrorPercent_std))
 
 if CREATE_OUTPUT_FILE:
-    outfilename = rotor_name.replace("Exports", "Reports") + "_BeakOffsetStatsOut.txt"
+    base = os.path.basename(rotor_name)
+    basefile = os.path.splitext(base)[0]
+    prefix = rotor_name.replace(base, "")
+    prefix = prefix.replace("Exports", "Reports")
+    abspath = os.path.abspath(prefix)
+    outpath = abspath.replace("Exports", "Reports")
+    if not os.path.exists(outpath):
+        os.mkdir(outpath)
+
+    outfilename = outpath + "\\" + basefile +"_BeakOffsetStatsOut.txt"
+    
     fileOut = open(outfilename, 'wt')
 
     fileOut.write("Beak Error Stats\n\n")

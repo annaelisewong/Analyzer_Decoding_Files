@@ -8,13 +8,6 @@ import subprocess
 # Create a variable to make it easier for other people to use the script
 script_path = "C:\\Users\\awong\\Documents\\Analyzer_Decoding_Files\\"
 
-# # Create the Exports and Reports folders
-# if not os.path.exists(".\\Exports\\"):
-#     os.makedirs(".\\Exports\\")
-
-# if not os.path.exists(".\\Reports\\"):
-#     os.makedirs(".\\Reports\\")
-
 # Export data from .sal files
 print("\n* export_digital_csv.py\n")
 p = subprocess.Popen(["python3", script_path + "export_digital_csv.py"])
@@ -110,7 +103,8 @@ statuswriter.writerow(status)
 print("\n* pho_raw_beak.py\n")
 file_count = 0
 status = ["pho_raw_beak.py"]
-result = subprocess.run(["python3", script_path + "RunAll_pho_raw_beak.py"], capture_output=False, text=True)
+gcd_fp = "C:\\Users\\awong\\Documents\\Analyzer_Decoding_Files\\analyzer_gcds.txt"
+result = subprocess.run(["python3", script_path + "RunAll_pho_raw_beak.py", "-f", gcd_fp], capture_output=False, text=True)
 # if result.returncode != 0:
 #     status.append("no")
 # else:
@@ -159,6 +153,20 @@ for rotor_name in rotor_names:
         status.append("yes")
 statuswriter.writerow(status)
 
+# count_pho_readings_per_beak.py
+print("\n* count_pho_readings_per_beak.py\n")
+file_count = 0
+status = ["count_pho_readings_per_beak.py"]
+for rotor_name in rotor_names:
+    file_count += 1
+    print("  (%d/%d) Input file prefix: %s" % (file_count, len(rotor_names), rotor_name))
+    result = subprocess.run(["python3", script_path + "count_pho_readings_per_beak.py", "-i", rotor_name, "-o"], capture_output=False, text=True)
+    if result.returncode != 0:
+        status.append("no")
+    else:
+        status.append("yes")
+statuswriter.writerow(status)
+
 # extract_phase_timestamps.py
 print("\n* extract_phase_timestamps.py\n")
 file_count = 0
@@ -188,12 +196,12 @@ for rotor_name in rotor_names:
 statuswriter.writerow(status)
 status_tracker.close()
 
-# compare_tolerances.py
-print("\n* compare_tolerances.py")
-file_count = 0
-outfilename = "ToleranceComparisonOut.txt"
-fileOut = open(outfilename, "wt")
-for rotor_name in rotor_names:
-    file_count += 1
-    print("  (%d/%d) Input file prefix: %s" % (file_count, len(rotor_names), rotor_name))
-    result = subprocess.run(["python3", script_path + "compare_tolerances.py", "-r", rotor_name, "-t", script_path + "Tolerances.csv"], capture_output=False, text=True)
+# # compare_tolerances.py
+# print("\n* compare_tolerances.py")
+# file_count = 0
+# outfilename = "ToleranceComparisonOut.txt"
+# fileOut = open(outfilename, "wt")
+# for rotor_name in rotor_names:
+#     file_count += 1
+#     print("  (%d/%d) Input file prefix: %s" % (file_count, len(rotor_names), rotor_name))
+#     result = subprocess.run(["python3", script_path + "compare_tolerances.py", "-r", rotor_name, "-t", script_path + "Tolerances.csv"], capture_output=False, text=True)

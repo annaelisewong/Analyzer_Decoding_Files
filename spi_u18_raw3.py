@@ -533,9 +533,6 @@ if rotor_name == '':
 	sys.exit(1)
 
 infilename = rotor_name + "_Group1.csv"
-outfilename = rotor_name + "_Group1Data.txt"
-if "Exports" in outfilename:
-	outfilename = outfilename.replace("Exports", "Reports")
 
 try:
 	fileIn = open(infilename, 'rt')
@@ -548,6 +545,12 @@ basefile = os.path.splitext(base)[0]
 # AEW edit
 prefix = infilename.replace(base, "")
 prefix = prefix.replace("Exports", "Reports")
+abspath = os.path.abspath(prefix)
+outpath = abspath.replace("Exports", "Reports")
+if not os.path.exists(outpath):
+	os.mkdir(outpath)
+
+outfilename = outpath + "\\" + basefile + "Data.txt"
 
 lastmodified= os.stat("%s"%(infilename)).st_mtime
 aa = time.localtime(lastmodified)

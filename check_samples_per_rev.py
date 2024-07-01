@@ -68,7 +68,16 @@ onePerRev = np.all(timePerSample)
 print("    One sample/rev: %r" % onePerRev)
 
 if CREATE_OUTPUT_FILE:
-    outfilename = rotor_name + "_SamplesPerRevOut.txt"
+    base = os.path.basename(infilename)
+    basefile = os.path.splitext(base)[0]
+    prefix = infilename.replace(base, "")
+    prefix = prefix.replace("Exports", "Reports")
+    abspath = os.path.abspath(prefix)
+    outpath = abspath.replace("Exports", "Reports")
+    if not os.path.exists(outpath):
+        os.mkdir(outpath)
+
+    outfilename = outpath + "\\" + basefile + "_SamplesPerRevOut.txt"
     fileOut = open(outfilename, 'wt')
 
     fileOut.write("Sample Time Stats: %s\n\n" % infilename)

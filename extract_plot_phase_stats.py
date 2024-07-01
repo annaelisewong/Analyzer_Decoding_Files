@@ -1,5 +1,6 @@
 import sys
 import subprocess
+import os
 
 from enum import Enum
 import sys
@@ -3022,7 +3023,16 @@ for i in range(len(motor_files)):
 	plt.plot(xtime, yrpm, color=colors[i], linewidth=0.5, label=motor_files[i])
 
 ## Uncomment to calculate and print statistics for each motor command section
-outfilename = rotor_name + "_PhaseStatsOut.txt"
+base = os.path.basename(ris_infilename)
+basefile = os.path.splitext(base)[0]
+prefix = ris_infilename.replace(base, "")
+prefix = prefix.replace("Exports", "Reports")
+abspath = os.path.abspath(prefix)
+outpath = abspath.replace("Exports", "Reports")
+if not os.path.exists(outpath):
+    os.mkdir(outpath)
+
+outfilename = outpath + "\\" + basefile + "_PhaseStatsOut.txt"
 fileOut = open(outfilename, 'wt')
 
 if "Rotor1" in rotor_name:

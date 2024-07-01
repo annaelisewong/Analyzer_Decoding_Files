@@ -105,7 +105,16 @@ print("Avg  %9.3f" % (avg))
 print("Std  %9.3f" % (std))
 
 if CREATE_OUTPUT_FILE:
-    outfilename = rotor_name.replace("Exports", "Reports") + "_HoldTimeStatsOut.txt"
+    base = os.path.basename(rotor_name)
+    basefile = os.path.splitext(base)[0]
+    prefix = rotor_name.replace(base, "")
+    prefix = prefix.replace("Exports", "Reports")
+    abspath = os.path.abspath(prefix)
+    outpath = abspath.replace("Exports", "Reports")
+    if not os.path.exists(outpath):
+        os.mkdir(outpath)
+
+    outfilename = outpath + "\\" + basefile + "_HoldTimeStatsOut.txt"
     fileOut = open(outfilename, 'wt')
 
     fileOut.write("Hold Time Stats\n\n")
