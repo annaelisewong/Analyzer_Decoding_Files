@@ -25,85 +25,85 @@ statuswriter = csv.writer(status_tracker, delimiter = ',')
 titles = ['Script Names'] + [os.path.basename(rotor_name) for rotor_name in rotor_names]
 statuswriter.writerow(titles)
 
-# spi_pho_raw3.py
-print("\n\n* spi_pho_raw3.py\n")
-file_count = 0
-status = ["spi_pho_raw3.py"]
-for rotor_name in rotor_names:
-    # Make sure Results folder exists
-    if not os.path.exists(os.path.dirname(rotor_name).replace("Exports", "Reports")):
-        os.makedirs(os.path.dirname(rotor_name).replace("Exports", "Reports"))
+# # spi_pho_raw3.py
+# print("\n\n* spi_pho_raw3.py\n")
+# file_count = 0
+# status = ["spi_pho_raw3.py"]
+# for rotor_name in rotor_names:
+#     # Make sure Results folder exists
+#     if not os.path.exists(os.path.dirname(rotor_name).replace("Exports", "Reports")):
+#         os.makedirs(os.path.dirname(rotor_name).replace("Exports", "Reports"))
 
-    file_count += 1
-    print("  (%d/%d) Input file prefix: %s" % (file_count, len(rotor_names), rotor_name))
-    result = subprocess.run(["python3", script_path + "spi_pho_raw3.py", "-r", rotor_name, "-a", "Serial"], capture_output=False, text=True)
-    if result.returncode != 0:
-        status.append("no")
-    else:
-        status.append("yes")
-statuswriter.writerow(status)
+#     file_count += 1
+#     print("  (%d/%d) Input file prefix: %s" % (file_count, len(rotor_names), rotor_name))
+#     result = subprocess.run(["python3", script_path + "spi_pho_raw3.py", "-r", rotor_name, "-a", "Serial"], capture_output=False, text=True)
+#     if result.returncode != 0:
+#         status.append("no")
+#     else:
+#         status.append("yes")
+# statuswriter.writerow(status)
 
-# pc104decode3.py
-print("\n* pc104decode3.py\n")
-file_count = 0
-status = ["pc104decode3.py"]
-for rotor_name in rotor_names:
-    file_count += 1
-    print("  (%d/%d) Input file prefix: %s" % (file_count, len(rotor_names), rotor_name))
-    result = subprocess.run(["python3", script_path + "pc104decode3.py", "-r", rotor_name], capture_output=False, text=True)
-    if result.returncode != 0:
-        status.append("no")
-    else:
-        status.append("yes")
-statuswriter.writerow(status)
+# # pc104decode3.py
+# print("\n* pc104decode3.py\n")
+# file_count = 0
+# status = ["pc104decode3.py"]
+# for rotor_name in rotor_names:
+#     file_count += 1
+#     print("  (%d/%d) Input file prefix: %s" % (file_count, len(rotor_names), rotor_name))
+#     result = subprocess.run(["python3", script_path + "pc104decode3.py", "-r", rotor_name], capture_output=False, text=True)
+#     if result.returncode != 0:
+#         status.append("no")
+#     else:
+#         status.append("yes")
+# statuswriter.writerow(status)
 
-# Ris_File_Dump.py
-print("\n* Ris_File_Dump.py\n")
-file_count = 0
-status = ["Ris_File_Dump.py"]
-for rotor_name in rotor_names:
-    file_count += 1
-    print("  (%d/%d) Input file prefix: %s" % (file_count, len(rotor_names), rotor_name))
-    result = subprocess.run(["python3", script_path + "Ris_File_Dump.py", "-r", rotor_name], capture_output=False, text=True)
-    if result.returncode != 0:
-        status.append("no")
-    else:
-        status.append("yes")
-statuswriter.writerow(status)
+# # Ris_File_Dump.py
+# print("\n* Ris_File_Dump.py\n")
+# file_count = 0
+# status = ["Ris_File_Dump.py"]
+# for rotor_name in rotor_names:
+#     file_count += 1
+#     print("  (%d/%d) Input file prefix: %s" % (file_count, len(rotor_names), rotor_name))
+#     result = subprocess.run(["python3", script_path + "Ris_File_Dump.py", "-r", rotor_name], capture_output=False, text=True)
+#     if result.returncode != 0:
+#         status.append("no")
+#     else:
+#         status.append("yes")
+# statuswriter.writerow(status)
 
-# spi_u18_raw3.py
-print("\n* spi_u18_raw3.py\n")
-file_count = 0
-status = ["spi_u18_raw3.py"]
-for rotor_name in rotor_names:
-    file_count += 1
-    print("  (%d/%d) Input file prefix: %s" % (file_count, len(rotor_names), rotor_name))
-    result = subprocess.run(["python3", script_path + "spi_u18_raw3.py", "-r", rotor_name, "-a"], capture_output=False, text=True)
-    if result.returncode != 0:
-        status.append("no")
-    else:
-        status.append("yes")
-statuswriter.writerow(status)
+# # spi_u18_raw3.py
+# print("\n* spi_u18_raw3.py\n")
+# file_count = 0
+# status = ["spi_u18_raw3.py"]
+# for rotor_name in rotor_names:
+#     file_count += 1
+#     print("  (%d/%d) Input file prefix: %s" % (file_count, len(rotor_names), rotor_name))
+#     result = subprocess.run(["python3", script_path + "spi_u18_raw3.py", "-r", rotor_name, "-a"], capture_output=False, text=True)
+#     if result.returncode != 0:
+#         status.append("no")
+#     else:
+#         status.append("yes")
+# statuswriter.writerow(status)
 
-# motcmd3.py
-print("\n* motcmd3.py\n")
-file_count = 0
-status = ["motcmd3.py"]
-LEGACY = False
-for rotor_name in rotor_names:
-    file_count += 1
-    print("  (%d/%d) Input file prefix: %s" % (file_count, len(rotor_names), rotor_name))
-    result = subprocess.run(["python3", script_path + "motcmd3.py", "-r", rotor_name], capture_output=False, text=True)
-    if not LEGACY and result.returncode != 0:
-        LEGACY = True
-        # Needs to be rerun with the legacy filename swap consideration
-        result = subprocess.run(["python3", script_path + "motcmd3.py", "-r", rotor_name, "-l"], capture_output=False, text=True)
-    if result.returncode != 0 and LEGACY:
-        status.append("no")
-    else:
-        status.append("yes")
-    LEGACY = False
-statuswriter.writerow(status)
+# # motcmd3.py
+# print("\n* motcmd3.py\n")
+# file_count = 0
+# status = ["motcmd3.py"]
+# LEGACY = False
+# for rotor_name in rotor_names:
+#     file_count += 1
+#     print("  (%d/%d) Input file prefix: %s" % (file_count, len(rotor_names), rotor_name))
+#     result = subprocess.run(["python3", script_path + "motcmd3.py", "-r", rotor_name], capture_output=False, text=True)
+#     if not LEGACY and result.returncode != 0:
+#         LEGACY = True
+#         # Needs to be rerun with the legacy filename swap consideration
+#         result = subprocess.run(["python3", script_path + "motcmd3.py", "-r", rotor_name, "-l"], capture_output=False, text=True)
+#     if result.returncode != 0 and LEGACY:
+#         status.append("no")
+#     else:
+#         status.append("yes")
+#     LEGACY = False
+# statuswriter.writerow(status)
 
 # pho_raw_beak.py
 print("\n* pho_raw_beak.py\n")

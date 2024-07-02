@@ -26,9 +26,9 @@ for o, a in opts:
     if o == "-f":
         gcd_infilename = a
 
+
 if gcd == "":
     file_list = [os.path.join(dirpath, filename) for dirpath, _, filenames in os.walk('.') for filename in filenames if "_MsgOut" in filename]
-
     # outfilename0 = "gcd_values.csv"
     # if os.path.exists(outfilename0):
     #     fileOut = open(outfilename0, 'wt')
@@ -61,8 +61,8 @@ if gcd == "":
 
 ## Part 1: Extract the GCD values for each file
     file_count = 1
-
     for infilename in file_list:
+        infilename = os.path.abspath(infilename)
         EXTRACT_GCD = True
         gcd = 0
         for sn, g in gcd_list:
