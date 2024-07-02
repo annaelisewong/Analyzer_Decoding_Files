@@ -17,7 +17,7 @@ VERBOSE2 = 0
 VERBOSE3 = 0
 
 def usage():
-    print( "motcmd <rx_file> <tx_file>")
+    print("motcmd -r RotorName [-l]")
 
 
 # dir 1 = out, 0 = in
@@ -275,22 +275,29 @@ if argc < 2:
 # txfilename = sys.argv[2]
 
 try:
-	opts, args = getopt.getopt(sys.argv[1:], "r:")
+	opts, args = getopt.getopt(sys.argv[1:], "r:l")
 except getopt.error:
 	usage()
 	sys.exit(2)
 
 # Process options
 rotor_name = ""
+LEGACY = False
      
 for o, a in opts:
     if o == "-r":
         rotor_name = a
-
+    elif o == "-l":
+        LEGACY = True
+		
 rotor_name = rotor_name.replace("Exports", "Reports")
 
-rxfilename = rotor_name + "_Group1_motrx.txt"
-txfilename = rotor_name + "_Group1_mottx.txt"
+if LEGACY:
+    rxfilename = rotor_name + "_Group1_mottx.txt"
+    txfilename = rotor_name + "_Group1_motrx.txt"
+else:
+	rxfilename = rotor_name + "_Group1_motrx.txt"
+	txfilename = rotor_name + "_Group1_mottx.txt"
 
 outfilename = rotor_name + "_MotCmdMsgOut.txt"
 if os.path.exists(outfilename):

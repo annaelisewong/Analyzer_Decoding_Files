@@ -89,14 +89,20 @@ statuswriter.writerow(status)
 print("\n* motcmd3.py\n")
 file_count = 0
 status = ["motcmd3.py"]
+LEGACY = False
 for rotor_name in rotor_names:
     file_count += 1
     print("  (%d/%d) Input file prefix: %s" % (file_count, len(rotor_names), rotor_name))
     result = subprocess.run(["python3", script_path + "motcmd3.py", "-r", rotor_name], capture_output=False, text=True)
-    if result.returncode != 0:
+    if not LEGACY and result.returncode != 0:
+        LEGACY = True
+        # Needs to be rerun with the legacy filename swap consideration
+        result = subprocess.run(["python3", script_path + "motcmd3.py", "-r", rotor_name, "-l"], capture_output=False, text=True)
+    if result.returncode != 0 and LEGACY:
         status.append("no")
     else:
         status.append("yes")
+    LEGACY = False
 statuswriter.writerow(status)
 
 # pho_raw_beak.py
