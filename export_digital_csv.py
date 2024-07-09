@@ -26,7 +26,10 @@ for file in file_list:
     infile = os.path.abspath(file)
     infilepath = os.path.split(infile)[0]
     infilename = os.path.split(infile)[1]
-    outfilepath = infilepath[:-4] + "Exports" # Change the output folder from Data to Exports
+    if infilepath[-4:] == "Data":
+        outfilepath = infilepath[:-4] + "Exports" # Change the output folder from Data to Exports
+    else:
+        outfilepath = infilepath
     outfilename = infilename.replace(".sal", ".csv")
 
     print("(%d/%d) File: %s" % (file_count, len(file_list), file))

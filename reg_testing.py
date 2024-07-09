@@ -30,6 +30,7 @@ statuswriter.writerow(titles)
 # file_count = 0
 # status = ["spi_pho_raw3.py"]
 # for rotor_name in rotor_names:
+#     rotor_name = os.path.abspath(rotor_name)
 #     # Make sure Results folder exists
 #     if not os.path.exists(os.path.dirname(rotor_name).replace("Exports", "Reports")):
 #         os.makedirs(os.path.dirname(rotor_name).replace("Exports", "Reports"))
@@ -105,87 +106,87 @@ statuswriter.writerow(titles)
 #     LEGACY = False
 # statuswriter.writerow(status)
 
-# pho_raw_beak.py
-print("\n* pho_raw_beak.py\n")
-file_count = 0
-status = ["pho_raw_beak.py"]
-gcd_fp = "C:\\Users\\awong\\Documents\\Analyzer_Decoding_Files\\analyzer_gcds.txt"
-result = subprocess.run(["python3", script_path + "RunAll_pho_raw_beak.py", "-f", gcd_fp], capture_output=False, text=True)
-# if result.returncode != 0:
-#     status.append("no")
-# else:
-#     status.append("yes")
-statuswriter.writerow(status)
+# # pho_raw_beak.py
+# print("\n* pho_raw_beak.py\n")
+# file_count = 0
+# status = ["pho_raw_beak.py"]
+# gcd_fp = "C:\\Users\\awong\\Documents\\Analyzer_Decoding_Files\\analyzer_gcds.txt"
+# result = subprocess.run(["python3", script_path + "RunAll_pho_raw_beak.py", "-f", gcd_fp], capture_output=False, text=True)
+# # if result.returncode != 0:
+# #     status.append("no")
+# # else:
+# #     status.append("yes")
+# statuswriter.writerow(status)
 
-# extract_beak_timing_stats.py
-print("\n* extract_beak_timing_stats.py\n")
-file_count = 0
-status = ["extract_beak_timing_stats.py"]
-for rotor_name in rotor_names:
-    file_count += 1
-    print("  (%d/%d) Input file prefix: %s" % (file_count, len(rotor_names), rotor_name))
-    result = subprocess.run(["python3", script_path + "extract_beak_timing_stats.py", "-r", rotor_name, "-o"], capture_output=False, text=True)
-    if result.returncode != 0:
-        status.append("no")
-    else:
-        status.append("yes")
-statuswriter.writerow(status)
+# # extract_beak_timing_stats.py
+# print("\n* extract_beak_timing_stats.py\n")
+# file_count = 0
+# status = ["extract_beak_timing_stats.py"]
+# for rotor_name in rotor_names:
+#     file_count += 1
+#     print("  (%d/%d) Input file prefix: %s" % (file_count, len(rotor_names), rotor_name))
+#     result = subprocess.run(["python3", script_path + "extract_beak_timing_stats.py", "-r", rotor_name, "-o"], capture_output=False, text=True)
+#     if result.returncode != 0:
+#         status.append("no")
+#     else:
+#         status.append("yes")
+# statuswriter.writerow(status)
 
-# extract_beak_offset_stats.py
-print("\n* extract_beak_offset_stats.py\n")
-file_count = 0
-status = ["extract_beak_offset_stats.py"]
-for rotor_name in rotor_names:
-    file_count += 1
-    print("  (%d/%d) Input file prefix: %s" % (file_count, len(rotor_names), rotor_name))
-    result = subprocess.run(["python3", script_path + "extract_beak_offset_stats.py", "-r", rotor_name, "-o"], capture_output=False, text=True)
-    if result.returncode != 0:
-        status.append("no")
-    else:
-        status.append("yes")
-statuswriter.writerow(status)
+# # extract_beak_offset_stats.py
+# print("\n* extract_beak_offset_stats.py\n")
+# file_count = 0
+# status = ["extract_beak_offset_stats.py"]
+# for rotor_name in rotor_names:
+#     file_count += 1
+#     print("  (%d/%d) Input file prefix: %s" % (file_count, len(rotor_names), rotor_name))
+#     result = subprocess.run(["python3", script_path + "extract_beak_offset_stats.py", "-r", rotor_name, "-o"], capture_output=False, text=True)
+#     if result.returncode != 0:
+#         status.append("no")
+#     else:
+#         status.append("yes")
+# statuswriter.writerow(status)
 
-# extract_hold_time_stats.py
-print("\n* extract_hold_time_stats.py\n")
-file_count = 0
-status = ["extract_hold_time_stats.py"]
-for rotor_name in rotor_names:
-    file_count += 1
-    print("  (%d/%d) Input file prefix: %s" % (file_count, len(rotor_names), rotor_name))
-    result = subprocess.run(["python3", script_path + "extract_hold_time_stats.py", "-r", rotor_name, "-o"], capture_output=False, text=True)
-    if result.returncode != 0:
-        status.append("no")
-    else:
-        status.append("yes")
-statuswriter.writerow(status)
+# # extract_hold_time_stats.py
+# print("\n* extract_hold_time_stats.py\n")
+# file_count = 0
+# status = ["extract_hold_time_stats.py"]
+# for rotor_name in rotor_names:
+#     file_count += 1
+#     print("  (%d/%d) Input file prefix: %s" % (file_count, len(rotor_names), rotor_name))
+#     result = subprocess.run(["python3", script_path + "extract_hold_time_stats.py", "-r", rotor_name, "-o"], capture_output=False, text=True)
+#     if result.returncode != 0:
+#         status.append("no")
+#     else:
+#         status.append("yes")
+# statuswriter.writerow(status)
 
-# count_pho_readings_per_beak.py
-print("\n* count_pho_readings_per_beak.py\n")
-file_count = 0
-status = ["count_pho_readings_per_beak.py"]
-for rotor_name in rotor_names:
-    file_count += 1
-    print("  (%d/%d) Input file prefix: %s" % (file_count, len(rotor_names), rotor_name))
-    result = subprocess.run(["python3", script_path + "count_pho_readings_per_beak.py", "-i", rotor_name, "-o"], capture_output=False, text=True)
-    if result.returncode != 0:
-        status.append("no")
-    else:
-        status.append("yes")
-statuswriter.writerow(status)
+# # count_pho_readings_per_beak.py
+# print("\n* count_pho_readings_per_beak.py\n")
+# file_count = 0
+# status = ["count_pho_readings_per_beak.py"]
+# for rotor_name in rotor_names:
+#     file_count += 1
+#     print("  (%d/%d) Input file prefix: %s" % (file_count, len(rotor_names), rotor_name))
+#     result = subprocess.run(["python3", script_path + "count_pho_readings_per_beak.py", "-i", rotor_name, "-o"], capture_output=False, text=True)
+#     if result.returncode != 0:
+#         status.append("no")
+#     else:
+#         status.append("yes")
+# statuswriter.writerow(status)
 
-# extract_phase_timestamps.py
-print("\n* extract_phase_timestamps.py\n")
-file_count = 0
-status = ["extract_phase_timestamps.py"]
-for rotor_name in rotor_names:
-    file_count += 1
-    print("  (%d/%d) Input file prefix: %s" % (file_count, len(rotor_names), rotor_name))
-    result = subprocess.run(["python3", script_path + "extract_phase_timestamps.py", "-r", rotor_name], capture_output=False, text=True)
-    if result.returncode != 0:
-        status.append("no")
-    else:
-        status.append("yes")
-statuswriter.writerow(status)
+# # extract_phase_timestamps.py
+# print("\n* extract_phase_timestamps.py\n")
+# file_count = 0
+# status = ["extract_phase_timestamps.py"]
+# for rotor_name in rotor_names:
+#     file_count += 1
+#     print("  (%d/%d) Input file prefix: %s" % (file_count, len(rotor_names), rotor_name))
+#     result = subprocess.run(["python3", script_path + "extract_phase_timestamps.py", "-r", rotor_name], capture_output=False, text=True)
+#     if result.returncode != 0:
+#         status.append("no")
+#     else:
+#         status.append("yes")
+# statuswriter.writerow(status)
 
 # extract_temps.py
 print("\n* extract_temps.py\n")

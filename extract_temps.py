@@ -18,11 +18,12 @@ AMBIENT_TEMPERATURE_CONVERT_OFFSET = 273.15			# 0.0 degrees C is 273.15 degrees 
 #-----------------------------------------------------------------------------------------------------------------------------------------#
 
 def usage():
-    print("extract_temps.py -r <rotor name> [-o] [-s] [-t]")
+    print("extract_temps.py -r <rotor name> [-o] [-s] [-t] [-d]")
     print(" -r <rotor name> Full prefix name of rotor")
     print(" -o Flag to indicate output file should be created")
     print(" -s Flag to indicate figure should be saved")
     print(" -t Flag to indicate phase timestamp overlay should be shown on plot")
+    print(" -d Flag to indicate the plot should be displayed to the user.")
     sys.exit(0)
 
 #-----------------------------------------------------------------------------------------------------------------------------------------#
@@ -385,7 +386,7 @@ if argc < 2:
 
 # Parse the command line options
 try:
-    opts, args = getopt.getopt(sys.argv[1:], "r:ost")
+    opts, args = getopt.getopt(sys.argv[1:], "r:ostd")
 except getopt.error:
     usage()
     sys.exit(2)
@@ -395,6 +396,7 @@ rotor_name = ""
 CREATE_OUTPUT_FILE = False
 SAVE_PLOT = False
 TIMESTAMP_OVERLAY = False
+DISPLAY_PLOT = False
      
 for o, a in opts:
     if o == "-r":
@@ -405,6 +407,8 @@ for o, a in opts:
         SAVE_PLOT = True
     elif o == "-t":
         TIMESTAMP_OVERLAY = True
+    elif o == "-d":
+        DISPLAY_PLOT = True
 
 if rotor_name == "":
     usage()
@@ -515,4 +519,5 @@ if SAVE_PLOT:
     plt.savefig("%s_TempPlot.png" % (rotor_name))
 
 plt.legend()
-plt.show()
+if DISPLAY_PLOT:
+    plt.show()
