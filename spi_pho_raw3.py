@@ -93,7 +93,7 @@ class dstruct:
 class parse_adc:
 	def __init__(self):
 		self.state = 0
-		self.cmdNames = {0x00:"Chan Read Dir", 0x20: "Chan Read Reg", 0x60: "Write Reg"}
+		self.cmdNames = {0x00:"Chan Read Dir", 0x20: "Chan Read Reg", 0x60: "Write Reg", 0x80: "Test Command Name"}
 		self.chanNames = {0: "340nm", 1: "405nm", 2: "467nm", 3: "500nm", \
 						  4: "515nm", 5: "550nm", 6: "600nm", 7: "630nm", \
 						  8: "850nm", 9: "WHT_FLASH", 10: "SPARE1", 11: "SPARE2", \
@@ -146,6 +146,7 @@ class parse_adc:
 		#
 		# Read Data Reg
 		if self.cmd == 0x20:
+			print(misoBytes)
 			status = misoBytes[1] & 0xe0
 			chan = (misoBytes[1] & 0x1f) - 8
 			value = (misoBytes[2] * 65536) + (misoBytes[3] * 256) + misoBytes[4]
